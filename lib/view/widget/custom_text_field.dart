@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hambolah_chat_app/core/constant/color.dart';
 import '../../core/helper/responsive.dart';
 
 class CustomTextFormField extends StatefulWidget {
@@ -54,15 +55,15 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         padding: EdgeInsets.symmetric(vertical: ScreenSize.height * 0.01),
         child: Text(widget.title ?? "",
             style: widget.titleTextStyle ??
-                    const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black)),
+                const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: MyColors.lightGrey)),
       ),
       TextFormField(
         style: widget.textFieldStyle ??
-            const TextStyle(color: Colors.black, fontSize: 18),
-        cursorColor: widget.cursorColor ?? Colors.black,
+            const TextStyle(color: MyColors.white, fontSize: 18),
+        cursorColor: widget.cursorColor ?? MyColors.white,
         keyboardType: widget.keyboardType,
         controller: widget.controller,
         obscureText: widget.isVisible == true ? isObscure : false,
@@ -106,21 +107,16 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               vertical: ScreenSize.height * 0.017292,
               horizontal: ScreenSize.width * 0.024305),
           filled: true,
-          fillColor: widget.fillColor ??  Colors.grey,
+          fillColor: widget.fillColor ?? MyColors.darkGrey2,
           hintText: widget.hintText,
           label: Text(widget.label ?? ""),
           enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 2),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide.none,
           ),
-          focusedBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(color: Colors.black,width: 3)),
+          focusedBorder: const OutlineInputBorder(borderSide: BorderSide.none),
           errorBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(color: Colors.red, width: 2)),
           focusedErrorBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(color: Colors.red, width: 2)),
         ),
       )

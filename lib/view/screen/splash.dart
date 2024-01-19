@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/helper/responsive.dart';
 import 'login.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    // ScreenSize.init(context);
+    ScreenSize.init(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(

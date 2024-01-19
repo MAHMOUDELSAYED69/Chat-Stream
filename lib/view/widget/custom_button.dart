@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hambolah_chat_app/core/constant/color.dart';
 import '../../core/helper/responsive.dart';
 
 class CustomButton extends StatelessWidget {
@@ -25,8 +26,8 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(borderRadius ?? 15)),
-            backgroundColor: color ?? const Color(0xff313131),
+                borderRadius: BorderRadius.circular(borderRadius ?? 3)),
+            backgroundColor: color ?? MyColors.purple,
             fixedSize: Size(width ?? double.maxFinite,
                 height ?? ScreenSize.height * 0.07262845849)),
         onPressed: onPressed,
@@ -34,7 +35,7 @@ class CustomButton extends StatelessWidget {
             Text(title ?? "",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: fontSize ?? 18,
+                  fontSize: fontSize ?? 22,
                   fontWeight: FontWeight.w600,
                 )));
   }
