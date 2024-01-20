@@ -5,6 +5,7 @@ import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/view/widget/custom_button.dart';
 
 import '../widget/custom_text_field.dart';
+import '../widget/terms_and_privacy.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -78,44 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     title: "Register",
                   ),
                   const SizedBox(height: 30),
-                  Wrap(
-                    children: [
-                      const Text(
-                        "By registering, you agree to Hambola's",
-                        style: TextStyle(
-                          color: MyColors.lightGrey,
-                        ),
-                      ),
-                      InkWell(
-                          child: const Text(
-                            "Terms of Service",
-                            style: TextStyle(
-                              color: MyColors.lightBlue,
-                            ),
-                          ),
-                          onTap: () {}),
-                      const Text(
-                        " and ",
-                        style: TextStyle(
-                          color: MyColors.lightGrey,
-                        ),
-                      ),
-                      InkWell(
-                          child: const Text(
-                            "Privacy Policy",
-                            style: TextStyle(
-                              color: MyColors.lightBlue,
-                            ),
-                          ),
-                          onTap: () {}),
-                      const Text(
-                        ".",
-                        style: TextStyle(
-                          color: MyColors.lightGrey,
-                        ),
-                      ),
-                    ],
-                  ),
+                  PrivacyAndTerms(onPrivacyPress: () {}, onTermsPress: () {}),
                   const SizedBox(height: 30),
                   Row(
                     children: [

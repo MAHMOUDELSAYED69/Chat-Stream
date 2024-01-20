@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
+import 'package:hambolah_chat_app/view/screen/forget_password.dart';
 import 'package:hambolah_chat_app/view/widget/custom_button.dart';
 
 import '../widget/custom_text_field.dart';
@@ -64,7 +65,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     alignment: Alignment.centerLeft,
                     child: InkWell(
                       splashColor: MyColors.darkGrey,
-                      onTap: () {},
+                      onTap: () => showForgetPasswordBottomSheet(context),
                       child: const Text(
                         "Forget your password?",
                         style:
