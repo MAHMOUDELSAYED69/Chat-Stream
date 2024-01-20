@@ -1,10 +1,8 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hambolah_chat_app/view/screen/home.dart';
 import '../../core/helper/responsive.dart';
-import 'login.dart';
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

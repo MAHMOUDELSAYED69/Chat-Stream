@@ -22,7 +22,8 @@ class CustomTextFormField extends StatefulWidget {
       this.isVisibleColor,
       this.titleTextStyle,
       this.textFieldStyle,
-      this.cursorColor});
+      this.cursorColor,
+      this.obscureText});
   final String? hintText;
   final String? label;
   final FormFieldSetter<String>? onSaved;
@@ -41,6 +42,7 @@ class CustomTextFormField extends StatefulWidget {
   final Color? cursorColor;
   final TextStyle? titleTextStyle;
   final TextStyle? textFieldStyle;
+  final bool? obscureText;
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
 }
@@ -74,7 +76,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         cursorColor: widget.cursorColor ?? MyColors.white,
         keyboardType: widget.keyboardType,
         controller: widget.controller,
-        obscureText: widget.isVisible == true ? isObscure : false,
+        obscureText:
+            widget.obscureText ?? widget.isVisible == true ? isObscure : false,
         validator: widget.validator ??
             (value) {
               if (value!.isEmpty) {
