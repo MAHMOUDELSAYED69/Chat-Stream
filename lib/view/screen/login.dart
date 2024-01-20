@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
+import 'package:hambolah_chat_app/core/helper/responsive.dart';
 import 'package:hambolah_chat_app/view/screen/forget_password.dart';
 import 'package:hambolah_chat_app/view/widget/custom_button.dart';
 
@@ -23,7 +24,7 @@ class _LogInScreenState extends State<LogInScreen> {
     return Scaffold(
       backgroundColor: MyColors.darkGrey,
       body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 0.04861 * ScreenSize.width),//20
           alignment: Alignment.center,
           width: double.infinity,
           child: SingleChildScrollView(
@@ -37,13 +38,13 @@ class _LogInScreenState extends State<LogInScreen> {
                     size: 90,
                     color: MyColors.white,
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: 0.0461133 * ScreenSize.height), //40
                   const Text("Welcome back!",
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: MyColors.white)),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 0.0115283 * ScreenSize.height), //10
                   const Text("We're so excited to see you again!",
                       style:
                           TextStyle(fontSize: 18, color: MyColors.lightGrey)),
@@ -53,14 +54,14 @@ class _LogInScreenState extends State<LogInScreen> {
                     },
                     title: "EMAIL",
                   ),
-                  const SizedBox(height: 15),
+                  SizedBox(height: 0.01729249 * ScreenSize.height), //15
                   CustomTextFormField(
                     onSaved: (data) {
                       password = data;
                     },
                     title: "PASSWORD",
                   ),
-                  const SizedBox(height: 5),
+                  SizedBox(height: 0.005764 * ScreenSize.height), //5
                   Align(
                     alignment: Alignment.centerLeft,
                     child: InkWell(
@@ -73,7 +74,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: 0.0345849 * ScreenSize.height), //30
                   CustomButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
@@ -85,7 +86,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     color: MyColors.purple,
                     title: "Log In",
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: 0.0345849 * ScreenSize.height), //30
                   Row(
                     children: [
                       const Text(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import '../../core/helper/responsive.dart';
 import 'login.dart';
@@ -57,7 +59,6 @@ class _SplashScreenState extends State<SplashScreen>
                             width: 160,
                             height: 110,
                           ))),
-                          
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: Text("start chatting with your friends",
@@ -88,6 +89,8 @@ class _SplashScreenState extends State<SplashScreen>
         seconds: 3,
       ),
       () {
+        log("height: ${ScreenSize.height}");
+        log("width: ${ScreenSize.width}");
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const LogInScreen()));
       },

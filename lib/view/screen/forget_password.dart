@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
+import 'package:hambolah_chat_app/core/helper/responsive.dart';
 
 import '../../core/helper/snackbar.dart';
 import '../widget/custom_button.dart';
@@ -31,7 +32,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 color: MyColors.lightGrey),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 56),
+            padding: const EdgeInsets.only(bottom: 50),
             child: Container(
               padding: EdgeInsets.only(
                   left: 16,
@@ -48,7 +49,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         fontWeight: FontWeight.w600,
                         color: MyColors.white),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 0.01729249 * ScreenSize.height), //15
                   const Text(
                     "Enter Your email for the verification processes, we will send a 4-digit code to your email.",
                     textAlign: TextAlign.center,
@@ -67,9 +68,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         color: MyColors.lightGrey,
                         fontSize: 30,
                         fontWeight: FontWeight.w600),
-                    isVisibleColor: const Color(0xff00a859),
                   ),
-                  const SizedBox(height: 25),
+                  SizedBox(height: 0.0288208 * ScreenSize.height),
                   CustomButton(
                     title: "Send link",
                     onPressed: () {
