@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hambolah_chat_app/view/screen/home.dart';
 import '../../core/helper/responsive.dart';
 import 'login.dart';
 
@@ -91,8 +93,8 @@ class _SplashScreenState extends State<SplashScreen>
       () {
         log("height: ${ScreenSize.height}");
         log("width: ${ScreenSize.width}");
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LogInScreen()));
+        Navigator.pushReplacementNamed(context,
+            FirebaseAuth.instance.currentUser == null ? "/login" : "/home");
       },
     );
   }
