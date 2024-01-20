@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "467163872531",
+    "project_id": "hambola-f3945",
+    "storage_bucket": "hambola-f3945.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467163872531:android:b4d093ed9ffb9d933f6ee6",
+        "android_client_info": {
+          "package_name": "com.example.hambolah_chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFh5vQWp96c3nN_IkHDZPFhYKQIKXm9so"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
