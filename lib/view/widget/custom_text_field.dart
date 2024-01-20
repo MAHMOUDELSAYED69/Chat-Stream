@@ -53,12 +53,20 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.symmetric(vertical: ScreenSize.height * 0.01),
-        child: Text(widget.title ?? "",
-            style: widget.titleTextStyle ??
-                const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: MyColors.lightGrey)),
+        child: Row(
+          children: [
+            Text(widget.title ?? "",
+                style: widget.titleTextStyle ??
+                    const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: MyColors.lightGrey)),
+            const Text(
+              " *",
+              style: TextStyle(color: MyColors.red),
+            )
+          ],
+        ),
       ),
       TextFormField(
         style: widget.textFieldStyle ??
@@ -115,9 +123,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           ),
           focusedBorder: const OutlineInputBorder(borderSide: BorderSide.none),
           errorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 2)),
+              borderSide: BorderSide(color: MyColors.red, width: 2)),
           focusedErrorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 2)),
+              borderSide: BorderSide(color: MyColors.red, width: 2)),
         ),
       )
     ]);

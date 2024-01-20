@@ -7,4 +7,5 @@ class MyColors {
   static const lightGrey = Color(0xffB5BAC1);
   static const lightBlue = Color(0xff00A8FC);
   static const white = Color(0xffFFFFFF);
+  static const red = Colors.red;
 }

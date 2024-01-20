@@ -6,16 +6,17 @@ import 'package:hambolah_chat_app/view/widget/custom_button.dart';
 
 import '../widget/custom_text_field.dart';
 
-class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LogInScreen> createState() => _LogInScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LogInScreenState extends State<LogInScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String? email;
+  String? displayName;
   String? password;
   @override
   Widget build(BuildContext context) {
@@ -37,68 +38,94 @@ class _LogInScreenState extends State<LogInScreen> {
                     color: MyColors.white,
                   ),
                   const SizedBox(height: 40),
-                  const Text("Welcome back!",
+                  const Text("Create an account",
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: MyColors.white)),
                   const SizedBox(height: 10),
-                  const Text("We're so excited to see you again!",
-                      style:
-                          TextStyle(fontSize: 18, color: MyColors.lightGrey)),
                   CustomTextFormField(
+                    title: "EMAIL",
                     onSaved: (data) {
                       email = data;
                     },
-                    title: "EMAIL",
                   ),
                   const SizedBox(height: 15),
                   CustomTextFormField(
+                    title: "DISPLAY NAME",
+                    onSaved: (data) {
+                      displayName = data;
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  CustomTextFormField(
+                    title: "PASSWORD",
                     onSaved: (data) {
                       password = data;
                     },
-                    title: "PASSWORD",
                   ),
-                  const SizedBox(height: 5),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: InkWell(
-                      splashColor: MyColors.darkGrey,
-                      onTap: () {},
-                      child: const Text(
-                        "Forget your password?",
-                        style:
-                            TextStyle(fontSize: 18, color: MyColors.lightBlue),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 40),
                   CustomButton(
                     onPressed: () {
-                      if (formKey.currentState!.validate()) {
+                      if (formKey.currentState?.validate() ?? false) {
                         formKey.currentState!.save();
                         log(email!);
+                        log(displayName!);
                         log(password!);
                       }
                     },
                     color: MyColors.purple,
-                    title: "Log In",
+                    title: "Register",
+                  ),
+                  const SizedBox(height: 30),
+                  Wrap(
+                    children: [
+                      const Text(
+                        "By registering, you agree to Hambola's",
+                        style: TextStyle(
+                          color: MyColors.lightGrey,
+                        ),
+                      ),
+                      InkWell(
+                          child: const Text(
+                            "Terms of Service",
+                            style: TextStyle(
+                              color: MyColors.lightBlue,
+                            ),
+                          ),
+                          onTap: () {}),
+                      const Text(
+                        " and ",
+                        style: TextStyle(
+                          color: MyColors.lightGrey,
+                        ),
+                      ),
+                      InkWell(
+                          child: const Text(
+                            "Privacy Policy",
+                            style: TextStyle(
+                              color: MyColors.lightBlue,
+                            ),
+                          ),
+                          onTap: () {}),
+                      const Text(
+                        ".",
+                        style: TextStyle(
+                          color: MyColors.lightGrey,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 30),
                   Row(
                     children: [
-                      const Text(
-                        "Need an account? ",
-                        style:
-                            TextStyle(fontSize: 16, color: MyColors.lightGrey),
-                      ),
                       InkWell(
                         splashColor: MyColors.darkGrey,
                         onTap: () {
-                          Navigator.pushNamed(context, "/register");
+                          Navigator.pushNamed(context, "/login");
                         },
                         child: const Text(
-                          "Register",
+                          "Already have an account?",
                           style: TextStyle(
                               fontSize: 18, color: MyColors.lightBlue),
                         ),
