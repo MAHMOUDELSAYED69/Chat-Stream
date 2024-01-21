@@ -22,9 +22,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => RegisterCubit(),
         ),
-        BlocProvider(
-          create: (context) => GoogleSignInCubit(),
-        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

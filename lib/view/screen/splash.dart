@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../core/helper/responsive.dart';
 
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -91,8 +90,12 @@ class _SplashScreenState extends State<SplashScreen>
       () {
         log("height: ${ScreenSize.height}");
         log("width: ${ScreenSize.width}");
-        Navigator.pushReplacementNamed(context,
-            FirebaseAuth.instance.currentUser == null ? "/login" : "/home");
+        Navigator.pushReplacementNamed(
+            context,
+            FirebaseAuth.instance.currentUser != null &&
+                    FirebaseAuth.instance.currentUser!.emailVerified
+                ? "/home"
+                : "/login");
       },
     );
   }

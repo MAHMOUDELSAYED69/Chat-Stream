@@ -41,7 +41,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (state is RegisterSuccess) {
           FocusScope.of(context).unfocus();
           isLoading = false;
-          Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
+          scaffoldSnackBar(context, "verify your Email and log in");
+          Navigator.pop(context);
         }
         if (state is RegisterFailure) {
           isLoading = false;
