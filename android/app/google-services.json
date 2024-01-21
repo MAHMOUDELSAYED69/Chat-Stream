@@ -12,7 +12,20 @@
           "package_name": "com.example.hambolah_chat_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "467163872531-6am0dff2b6kkfl55u8gacm233opl2k48.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hambolah_chat_app",
+            "certificate_hash": "4cd1fe74f30ecc9a511c7a0a53b43140150b2eb6"
+          }
+        },
+        {
+          "client_id": "467163872531-8cvdnou40ouro7togk4ha3kidkcfm7vl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDFh5vQWp96c3nN_IkHDZPFhYKQIKXm9so"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467163872531-8cvdnou40ouro7togk4ha3kidkcfm7vl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "467163872531-slib7sb8qkvklbaqaepl7qh4naobvbmq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hambolahChatApp.RunnerTests"
+              }
+            }
+          ]
         }
       }
     }

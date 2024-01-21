@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/core/helper/snackbar.dart';
-import 'package:hambolah_chat_app/logic/auth/register_cubit.dart';
 import 'package:hambolah_chat_app/view/widget/custom_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../core/helper/responsive.dart';
+import '../../logic/auth/register_cubit/register_cubit.dart';
 import '../widget/custom_text_field.dart';
 import '../widget/terms_and_privacy.dart';
 

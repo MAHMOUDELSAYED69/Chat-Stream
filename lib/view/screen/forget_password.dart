@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/core/helper/responsive.dart';
-
 import '../../core/helper/snackbar.dart';
 import '../widget/custom_button.dart';
 import '../widget/custom_text_field.dart';
@@ -14,6 +14,10 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
+  Future<void> resetPassword({required String email}) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
+
   GlobalKey<FormState> formKey = GlobalKey();
   String? email;
   @override
@@ -75,6 +79,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
+                        resetPassword(email: email!);
                         Navigator.pop(context);
                         scaffoldSnackBar(context, "Check your E-mail");
                       }
