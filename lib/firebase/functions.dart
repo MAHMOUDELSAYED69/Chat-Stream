@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthService {
@@ -77,5 +76,13 @@ class FirebaseAuthService {
       log("Error updating email: $e]");
       // Handle the error as needed
     }
+  }
+
+  static Future<void> updateUserProfile() async {
+    await FirebaseAuth.instance.currentUser!.updateDisplayName("Mahmoud Elsayed");
+    await FirebaseAuth.instance.currentUser!.updatePhotoURL("URLIMAGE");
+
+    log(FirebaseAuth.instance.currentUser!.displayName.toString());
+    log(FirebaseAuth.instance.currentUser!.photoURL.toString());
   }
 }

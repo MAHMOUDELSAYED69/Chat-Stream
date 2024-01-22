@@ -97,6 +97,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       if (deleteController.text.isNotEmpty &&
                           deleteController.text.length >= 8) {
                         await delete();
+                        deleteController.clear();
                         setState(() {});
                         if (FirebaseAuth.instance.currentUser == null) {
                           // ignore: use_build_context_synchronously

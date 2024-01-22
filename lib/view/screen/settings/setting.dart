@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/firebase/functions.dart';
@@ -44,9 +45,9 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Text(
-                    "mahmoud elsayed",
-                    style: TextStyle(
+                  Text(
+                    FirebaseAuth.instance.currentUser!.displayName.toString(),
+                    style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: MyColors.white),
@@ -70,7 +71,9 @@ class _SettingScreenState extends State<SettingScreen> {
             SettingButton(
               title: "Privacy",
               icon: Icons.lock_person_outlined,
-              onTap: () {},
+              onTap: () {
+                FirebaseAuthService.updateUserProfile();
+              },
             ),
             SettingButton(
               title: "Theme",
