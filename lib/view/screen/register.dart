@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hambolah_chat_app/core/cache/cache_functions.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/core/helper/snackbar.dart';
 import 'package:hambolah_chat_app/view/widget/custom_button.dart';
@@ -91,6 +92,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           title: "DISPLAY NAME",
                           onSaved: (data) {
                             displayName = data;
+                            CacheData.setData(
+                                key: "displayName", value: displayName);
                           },
                         ),
                         SizedBox(height: 0.01729249 * ScreenSize.height), //15

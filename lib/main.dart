@@ -9,6 +9,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  WidgetsFlutterBinding.ensureInitialized();
   await CacheData.cacheDataInit();
   runApp(const MyApp());
 }

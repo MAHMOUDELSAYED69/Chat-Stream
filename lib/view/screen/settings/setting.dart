@@ -36,12 +36,12 @@ class _SettingScreenState extends State<SettingScreen> {
               padding: const EdgeInsets.all(5),
               child: Row(
                 children: [
-                  const CircleAvatar(
+                   CircleAvatar(
                     radius: 35,
                     backgroundColor: MyColors.darkGrey2,
                     child: Text(
-                      "M",
-                      style: TextStyle(color: MyColors.white, fontSize: 24),
+                      FirebaseAuth.instance.currentUser!.displayName.toString()[0],
+                      style: const TextStyle(color: MyColors.white, fontSize: 24),
                     ),
                   ),
                   const SizedBox(width: 10),
