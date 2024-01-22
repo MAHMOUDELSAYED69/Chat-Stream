@@ -77,7 +77,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         formKey.currentState!.save();
                         FirebaseFunction.resetPassword(email: email!);
                         Navigator.pop(context);
-                        scaffoldSnackBar(context, "Check your E-mail");
+                        customSnackBar(context, "Check your E-mail");
                       }
                     },
                   ),

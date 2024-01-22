@@ -44,12 +44,12 @@ class _LogInScreenState extends State<LogInScreen> {
             Navigator.pushNamedAndRemoveUntil(
                 context, "/home", (route) => false);
           }else{
-            scaffoldSnackBar(context,"Please verify your Email");
+            customSnackBar(context,"Please verify your Email");
           }
         }
         if (state is LoginFailure) {
           isLoading = false;
-          scaffoldSnackBar(context, state.message);
+          customSnackBar(context, state.message);
         }
       },
       builder: (context, state) {

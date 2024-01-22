@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
+import 'package:hambolah_chat_app/firebase/functions.dart';
 import 'package:hambolah_chat_app/view/widget/setting_button.dart';
+
+import '../../../core/helper/snackbar.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -10,6 +14,7 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  TextEditingController emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,70 +39,51 @@ class _AccountScreenState extends State<AccountScreen> {
               title: "Change password",
               icon: Icons.lock,
               onTap: () {
-                customDialog(context, title: "New Password", onPressed: () {});
+                customDialog(context, btnTitle: "Send", title: "Reset Password",
+                    onPressed: () {
+                  FirebaseFunction.resetPassword(
+                      email:
+                          FirebaseAuth.instance.currentUser!.email.toString());
+                  Navigator.pop(context);
+                  customSnackBar(context, "Check your E-mail and login again!");
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/login", (route) => false);
+                  FirebaseFunction.logOut();
+                },
+                    widget: const Text(
+                      "Check your Email to reset your Password.",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    ));
               },
             ),
             SettingButton(
               title: "Change Email address",
               icon: Icons.email,
               onTap: () {
-                customDialog(context, title: "New Email", onPressed: () {});
+                customDialog(context,
+                    btnTitle: "Change",
+                    title: "New Email",
+                    controller: emailController, onPressed: () {
+                  FirebaseFunction.changeEmail(emailController.text);
+                });
               },
             ),
             SettingButton(
               title: "Delete account",
               icon: Icons.delete,
-              onTap: () {},
+              onTap: () {
+                customDialog(context,
+                    btnTitle: "",
+                    title: "Alert",
+                    widget: const Text(
+                      "Hambola SAD 😔",
+                      textAlign: TextAlign.center,
+                    ));
+              },
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Future<dynamic> customDialog(BuildContext context,
-      {required String title,
-      TextEditingController? controller,
-      void Function()? onPressed}) {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: const BeveledRectangleBorder(
-            side: BorderSide(color: MyColors.darkGrey),
-            borderRadius: BorderRadius.all(Radius.circular(2))),
-        backgroundColor: Colors.grey[50],
-        title: Text(
-          title,
-          style: const TextStyle(
-              fontSize: 24, fontWeight: FontWeight.w500, color: MyColors.black),
-          textAlign: TextAlign.center,
-        ),
-        content: TextField(
-          controller: controller,
-          cursorColor: MyColors.black,
-          decoration: const InputDecoration(
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: MyColors.black)),
-          ),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.cancel,
-                size: 35,
-                color: MyColors.red,
-              )),
-          IconButton(
-              onPressed: onPressed,
-              icon: const Icon(
-                Icons.check_circle,
-                size: 35,
-                color: MyColors.green,
-              )),
-        ],
       ),
     );
   }
