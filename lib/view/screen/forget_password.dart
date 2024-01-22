@@ -5,12 +5,14 @@ import 'package:hambolah_chat_app/firebase/functions.dart';
 import '../../core/helper/snackbar.dart';
 import '../widget/custom_button.dart';
 import '../widget/custom_text_field.dart';
+
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});
 
   @override
   State<ForgetPassword> createState() => _ForgetPasswordState();
 }
+
 class _ForgetPasswordState extends State<ForgetPassword> {
   GlobalKey<FormState> formKey = GlobalKey();
   String? email;

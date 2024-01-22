@@ -6,7 +6,8 @@ import '../screen/forget_password.dart';
 import '../screen/home.dart';
 import '../screen/login.dart';
 import '../screen/register.dart';
-import '../screen/setting.dart';
+import '../screen/settings/account.dart';
+import '../screen/settings/setting.dart';
 import '../screen/splash.dart';
 
 class MyApp extends StatelessWidget {
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
           "/home": (context) => const HomeScreen(),
           "/forget": (context) => const ForgetPassword(),
           "/setting": (context) => const SettingScreen(),
+          "/account": (context) => const AccountScreen(),
         },
       ),
     );

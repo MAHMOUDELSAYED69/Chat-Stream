@@ -16,6 +16,7 @@ class SettingButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Card(
+        shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(2))),
         color: MyColors.darkGrey2,
         child: Row(
           children: [
