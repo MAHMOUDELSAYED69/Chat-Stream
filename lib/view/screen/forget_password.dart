@@ -75,7 +75,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
-                        FirebaseFunction.resetPassword(email: email!);
+                        FirebaseAuthService.resetPassword(email: email!);
                         Navigator.pop(context);
                         customSnackBar(context, "Check your E-mail");
                       }

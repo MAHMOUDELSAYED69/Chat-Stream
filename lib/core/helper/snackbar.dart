@@ -21,6 +21,9 @@ Future<void> customDialog(BuildContext context,
     required String btnTitle,
     TextEditingController? controller,
     void Function()? onPressed,
+    TextInputType? keyboardType,
+    bool isobscure = false,
+    String? hintText,
     Widget? widget}) {
   return showDialog(
     context: context,
@@ -37,10 +40,13 @@ Future<void> customDialog(BuildContext context,
       ),
       content: widget ??
           TextField(
+            keyboardType: keyboardType,
+            obscureText: isobscure,
             controller: controller,
             cursorColor: MyColors.black,
-            decoration: const InputDecoration(
-              focusedBorder: UnderlineInputBorder(
+            decoration: InputDecoration(
+              hintText: hintText ?? "Password",
+              focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: MyColors.black)),
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/core/helper/responsive.dart';
 import 'package:hambolah_chat_app/core/helper/snackbar.dart';
+import 'package:hambolah_chat_app/firebase/functions.dart';
 import 'package:hambolah_chat_app/logic/auth/login_cubit/login_cubit.dart';
 import 'package:hambolah_chat_app/view/screen/forget_password.dart';
 import 'package:hambolah_chat_app/view/widget/custom_button.dart';
@@ -43,8 +44,9 @@ class _LogInScreenState extends State<LogInScreen> {
           if (FirebaseAuth.instance.currentUser!.emailVerified) {
             Navigator.pushNamedAndRemoveUntil(
                 context, "/home", (route) => false);
-          }else{
-            customSnackBar(context,"Please verify your Email");
+          } else {
+            customSnackBar(context, "Please verify your Email");
+            FirebaseAuthService.emailVerify();
           }
         }
         if (state is LoginFailure) {

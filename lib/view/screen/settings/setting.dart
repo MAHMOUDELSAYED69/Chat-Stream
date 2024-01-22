@@ -96,7 +96,7 @@ class _SettingScreenState extends State<SettingScreen> {
               title: "Log Out",
               icon: Icons.logout,
               onTap: () {
-                FirebaseFunction.logOut();
+                FirebaseAuthService.logOut();
                 Navigator.pushNamedAndRemoveUntil(
                     context, "/login", (route) => false);
               },

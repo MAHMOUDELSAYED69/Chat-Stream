@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
@@ -15,6 +16,13 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   TextEditingController emailController = TextEditingController();
+  TextEditingController deleteController = TextEditingController();
+  Future<void> delete() async {
+    await FirebaseAuthService.deleteUser(
+        email: FirebaseAuth.instance.currentUser!.email.toString(),
+        password: deleteController.text);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,14 +49,14 @@ class _AccountScreenState extends State<AccountScreen> {
               onTap: () {
                 customDialog(context, btnTitle: "Send", title: "Reset Password",
                     onPressed: () {
-                  FirebaseFunction.resetPassword(
+                  FirebaseAuthService.resetPassword(
                       email:
                           FirebaseAuth.instance.currentUser!.email.toString());
                   Navigator.pop(context);
                   customSnackBar(context, "Check your E-mail and login again!");
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/login", (route) => false);
-                  FirebaseFunction.logOut();
+                  FirebaseAuthService.logOut();
                 },
                     widget: const Text(
                       "Check your Email to reset your Password.",
@@ -62,10 +70,14 @@ class _AccountScreenState extends State<AccountScreen> {
               icon: Icons.email,
               onTap: () {
                 customDialog(context,
+                    keyboardType: TextInputType.emailAddress,
                     btnTitle: "Change",
                     title: "New Email",
+                    hintText: "Email",
                     controller: emailController, onPressed: () {
-                  FirebaseFunction.changeEmail(emailController.text);
+                  if (emailController.text.isNotEmpty) {
+                    FirebaseAuthService.changeEmail(emailController.text);
+                  }
                 });
               },
             ),
@@ -73,13 +85,36 @@ class _AccountScreenState extends State<AccountScreen> {
               title: "Delete account",
               icon: Icons.delete,
               onTap: () {
-                customDialog(context,
-                    btnTitle: "",
-                    title: "Alert",
-                    widget: const Text(
-                      "Hambola SAD 😔",
-                      textAlign: TextAlign.center,
-                    ));
+                customDialog(
+                  context,
+                  keyboardType: TextInputType.visiblePassword,
+                  btnTitle: "DELETE",
+                  title: "Warrning",
+                  controller: deleteController,
+                  isobscure: true,
+                  onPressed: () async {
+                    try {
+                      if (deleteController.text.isNotEmpty &&
+                          deleteController.text.length >= 8) {
+                        await delete();
+                        setState(() {});
+                        if (FirebaseAuth.instance.currentUser == null) {
+                          // ignore: use_build_context_synchronously
+                          customSnackBar(
+                              context, "User account deleted successfully.");
+                          // ignore: use_build_context_synchronously
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, "/login", (route) => false);
+                        }
+                      }
+                    } on Exception catch (err) {
+                      log(err.toString());
+                      // ignore: use_build_context_synchronously
+                      customSnackBar(context,
+                          "there was an error please try again later!");
+                    }
+                  },
+                );
               },
             ),
           ],

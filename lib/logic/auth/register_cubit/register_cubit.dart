@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hambolah_chat_app/firebase/functions.dart';
 import 'package:meta/meta.dart';
 
 part 'register_state.dart';
@@ -14,7 +15,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         email: email,
         password: password,
       );
-      FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      FirebaseAuthService.emailVerify();
       emit(RegisterSuccess());
     } on FirebaseAuthException catch (err) {
       emit(RegisterFailure(message: err.code));
