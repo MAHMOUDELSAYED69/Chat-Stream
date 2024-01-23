@@ -1,55 +1,51 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hambolah_chat_app/core/cache/cache_functions.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
-import 'package:hambolah_chat_app/core/helper/responsive.dart';
 import 'package:hambolah_chat_app/core/helper/snackbar.dart';
-import 'package:hambolah_chat_app/firebase/functions.dart';
-import 'package:hambolah_chat_app/logic/auth/login_cubit/login_cubit.dart';
-import 'package:hambolah_chat_app/view/screen/forget_password.dart';
 import 'package:hambolah_chat_app/view/widget/custom_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../widget/custom_text_field.dart';
+import '../../../core/helper/responsive.dart';
+import '../../../logic/auth/register_cubit/register_cubit.dart';
+import '../../widget/custom_text_field.dart';
+import '../../widget/terms_and_privacy.dart';
 
-class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LogInScreen> createState() => _LogInScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LogInScreenState extends State<LogInScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController txtController = TextEditingController();
   String? email;
+  String? displayName;
   String? password;
   bool isLoading = false;
-  login() {
-    if (formKey.currentState!.validate()) {
+  register() {
+    if (formKey.currentState?.validate() ?? false) {
       formKey.currentState!.save();
-      BlocProvider.of<LoginCubit>(context)
-          .userLogin(email: email!, password: password!);
+      BlocProvider.of<RegisterCubit>(context)
+          .userRegister(email: email!, password: password!);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginCubit, LoginState>(
+    return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
-        if (state is LoginLoading) {
+        if (state is RegisterLoading) {
           isLoading = true;
         }
-        if (state is LoginSuccess) {
-          isLoading = false;
+        if (state is RegisterSuccess) {
           FocusScope.of(context).unfocus();
-          if (FirebaseAuth.instance.currentUser!.emailVerified) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, "/home", (route) => false);
-          } else {
-            customSnackBar(context, "Please verify your Email");
-            FirebaseAuthService.emailVerify();
-          }
+          isLoading = false;
+          customSnackBar(context, "verify your Email and log in");
+          Navigator.pop(context);
         }
-        if (state is LoginFailure) {
+        if (state is RegisterFailure) {
           isLoading = false;
           customSnackBar(context, state.message);
         }
@@ -70,77 +66,90 @@ class _LogInScreenState extends State<LogInScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        SizedBox(height: 0.0345849 * ScreenSize.height), //30
                         const Icon(
                           Icons.chat,
                           size: 90,
                           color: MyColors.white,
                         ),
                         SizedBox(height: 0.0461133 * ScreenSize.height), //40
-                        const Text("Welcome back!",
+                        const Text("Create an account",
                             style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: MyColors.white)),
                         SizedBox(height: 0.0115283 * ScreenSize.height), //10
-                        const Text("We're so excited to see you again!",
-                            style: TextStyle(
-                                fontSize: 18, color: MyColors.lightGrey)),
                         CustomTextFormField(
                           keyboardType: TextInputType.emailAddress,
+                          title: "EMAIL",
                           onSaved: (data) {
                             email = data;
                           },
-                          title: "EMAIL",
                         ),
                         SizedBox(height: 0.01729249 * ScreenSize.height), //15
                         CustomTextFormField(
-                          isVisible: true,
+                          keyboardType: TextInputType.name,
+                          title: "DISPLAY NAME",
+                          onSaved: (data) {
+                            displayName = data;
+                            CacheData.setData(
+                                key: "displayName", value: displayName);
+                          },
+                        ),
+                        SizedBox(height: 0.01729249 * ScreenSize.height), //15
+                        CustomTextFormField(
+                          controller: txtController,
+                          obscureText: true,
                           keyboardType: TextInputType.visiblePassword,
+                          title: "PASSWORD",
                           onSaved: (data) {
                             password = data;
                           },
-                          title: "PASSWORD",
                         ),
-                        SizedBox(height: 0.005764 * ScreenSize.height), //5
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: InkWell(
-                            splashColor: MyColors.darkGrey,
-                            onTap: () => showForgetPasswordBottomSheet(context),
-                            child: const Text(
-                              "Forget your password?",
-                              style: TextStyle(
-                                  fontSize: 18, color: MyColors.lightBlue),
-                            ),
-                          ),
+                        SizedBox(height: 0.01729249 * ScreenSize.height), //15
+                        CustomTextFormField(
+                          obscureText: true,
+                          keyboardType: TextInputType.visiblePassword,
+                          title: "CONFIRM PASSWORD",
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "please fill out the field!";
+                            }
+                            if (value != txtController.text) {
+                              return "Wrong password";
+                            }
+                            return null;
+                          },
+                          onSaved: (data) {
+                            password = data;
+                          },
+                        ),
+                        SizedBox(height: 0.0461133 * ScreenSize.height), //40
+                        CustomButton(
+                          onPressed: register,
+                          color: MyColors.purple,
+                          title: "Register",
                         ),
                         SizedBox(height: 0.0345849 * ScreenSize.height), //30
-                        CustomButton(
-                          onPressed: login,
-                          color: MyColors.purple,
-                          title: "Log In",
-                        ),
+                        PrivacyAndTerms(
+                            onPrivacyPress: () {}, onTermsPress: () {}),
                         SizedBox(height: 0.0345849 * ScreenSize.height), //30
                         Row(
                           children: [
-                            const Text(
-                              "Need an account? ",
-                              style: TextStyle(
-                                  fontSize: 16, color: MyColors.lightGrey),
-                            ),
                             InkWell(
                               splashColor: MyColors.darkGrey,
                               onTap: () {
-                                Navigator.pushNamed(context, "/register");
+                                Navigator.pop(context);
                               },
                               child: const Text(
-                                "Register",
+                                "Already have an account?",
                                 style: TextStyle(
                                     fontSize: 18, color: MyColors.lightBlue),
                               ),
                             )
                           ],
-                        )
+                        ),
+                        SizedBox(height: 0.0345849 * ScreenSize.height), //30
                       ],
                     ),
                   ),

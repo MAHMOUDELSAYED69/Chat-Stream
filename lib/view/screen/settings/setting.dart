@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/firebase/functions.dart';
+import 'package:hambolah_chat_app/view/screen/settings/edit_account.dart';
 import '../../widget/setting_button.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -40,7 +42,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     radius: 35,
                     backgroundColor: MyColors.darkGrey2,
                     child: Text(
-                      FirebaseAuth.instance.currentUser!.displayName 
+                      FirebaseAuth.instance.currentUser!.displayName
                           .toString()
                           .toUpperCase()[0],
                       style:
@@ -57,9 +59,11 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   const Spacer(),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        showEditAccountBottomSheet(context);
+                      },
                       icon: const Icon(
-                        Icons.arrow_drop_down_circle_outlined,
+                        Icons.edit,
                         color: MyColors.white,
                       ))
                 ],

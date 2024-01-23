@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/core/helper/responsive.dart';
 import 'package:hambolah_chat_app/firebase/functions.dart';
-import '../../core/helper/snackbar.dart';
-import '../widget/custom_button.dart';
-import '../widget/custom_text_field.dart';
+import '../../../core/helper/snackbar.dart';
+import '../../widget/custom_button.dart';
+import '../../widget/custom_text_field.dart';
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});

@@ -78,10 +78,10 @@ class FirebaseAuthService {
     }
   }
 
-  static Future<void> updateUserProfile() async {
-    await FirebaseAuth.instance.currentUser!
-        .updateDisplayName(FirebaseAuth.instance.currentUser!.displayName);
-    await FirebaseAuth.instance.currentUser!.updatePhotoURL("URLIMAGE");
+  static Future<void> updateUserProfile(
+      {String? name, String? urlImage}) async {
+    await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
+    await FirebaseAuth.instance.currentUser!.updatePhotoURL(urlImage);
     log(FirebaseAuth.instance.currentUser!.displayName.toString());
     log(FirebaseAuth.instance.currentUser!.photoURL.toString());
   }
