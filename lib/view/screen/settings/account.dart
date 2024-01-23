@@ -5,6 +5,7 @@ import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/firebase/functions.dart';
 import 'package:hambolah_chat_app/view/widget/setting_button.dart';
 
+import '../../../core/cache/cache_functions.dart';
 import '../../../core/helper/snackbar.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -95,11 +96,11 @@ class _AccountScreenState extends State<AccountScreen> {
                   onPressed: () async {
                     try {
                       if (deleteController.text.isNotEmpty &&
-                          deleteController.text.length >= 8) {
+                          deleteController.text.length >= 6) {
                         await delete();
                         deleteController.clear();
-                        setState(() {});
                         if (FirebaseAuth.instance.currentUser == null) {
+                          CacheData.clearData(clearData: true);
                           // ignore: use_build_context_synchronously
                           customSnackBar(
                               context, "User account deleted successfully.");

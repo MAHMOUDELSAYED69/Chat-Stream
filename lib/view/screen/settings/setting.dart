@@ -36,12 +36,15 @@ class _SettingScreenState extends State<SettingScreen> {
               padding: const EdgeInsets.all(5),
               child: Row(
                 children: [
-                   CircleAvatar(
+                  CircleAvatar(
                     radius: 35,
                     backgroundColor: MyColors.darkGrey2,
                     child: Text(
-                      FirebaseAuth.instance.currentUser!.displayName.toString()[0],
-                      style: const TextStyle(color: MyColors.white, fontSize: 24),
+                      FirebaseAuth.instance.currentUser!.displayName 
+                          .toString()
+                          .toUpperCase()[0],
+                      style:
+                          const TextStyle(color: MyColors.white, fontSize: 24),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -71,9 +74,7 @@ class _SettingScreenState extends State<SettingScreen> {
             SettingButton(
               title: "Privacy",
               icon: Icons.lock_person_outlined,
-              onTap: () {
-                FirebaseAuthService.updateUserProfile();
-              },
+              onTap: () {},
             ),
             SettingButton(
               title: "Theme",
