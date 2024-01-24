@@ -1,9 +1,16 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:hambolah_chat_app/core/constant/color.dart';
+import 'package:hambolah_chat_app/core/helper/snackbar.dart';
 import 'package:hambolah_chat_app/firebase/functions.dart';
+import 'package:hambolah_chat_app/logic/image/image_cubit.dart';
 import 'package:hambolah_chat_app/view/screen/settings/edit_account.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../widget/setting_button.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -14,6 +21,8 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+  bool isLoading = false;
+  String? imageUrl;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,37 +45,81 @@ class _SettingScreenState extends State<SettingScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(5),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 35,
-                    backgroundColor: MyColors.darkGrey2,
-                    child: Text(
-                      FirebaseAuth.instance.currentUser!.displayName
-                          .toString()
-                          .toUpperCase()[0],
-                      style:
-                          const TextStyle(color: MyColors.white, fontSize: 24),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    FirebaseAuth.instance.currentUser!.displayName.toString(),
-                    style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: MyColors.white),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                      onPressed: () async {
-                        showEditAccountBottomSheet(context);
+              child: ModalProgressHUD(
+                inAsyncCall: isLoading,
+                child: Row(
+                  children: [
+                    BlocConsumer<ImageCubit, ImageState>(
+                      listener: (context, state) {
+                        if (state is Imageloading) {
+                          isLoading = true;
+                        }
+                        if (state is ImageSuccess) {
+                          isLoading = false;
+                          FirebaseAuthService.updateUserImage(
+                              urlImage: state.imageUrl);
+                          imageUrl = state.imageUrl;
+                        }
+                        if (state is ImageFailure) {
+                          isLoading = false;
+                          customSnackBar(context,
+                              "There was an error please try again later!");
+                          log(state.message);
+                        }
                       },
-                      icon: const Icon(
-                        Icons.edit,
-                        color: MyColors.white,
-                      ))
-                ],
+                      builder: (context, state) {
+                        return InkWell(
+                          onTap: () {
+                            BlocProvider.of<ImageCubit>(context)
+                                .pickImageFromGallery();
+                          },
+                          child: CircleAvatar(
+                            radius: 35,
+                            backgroundColor: MyColors.darkGrey2,
+                            backgroundImage: imageUrl != null
+                                ? FileImage(File(imageUrl!))
+                                : FirebaseAuth.instance.currentUser!.photoURL !=
+                                        null
+                                    ? FileImage(File(FirebaseAuth
+                                        .instance.currentUser!.photoURL!))
+                                    : null,
+                            child: imageUrl == null &&
+                                    FirebaseAuth
+                                            .instance.currentUser!.photoURL ==
+                                        null
+                                ? Text(
+                                    FirebaseAuth
+                                        .instance.currentUser!.displayName
+                                        .toString()
+                                        .toUpperCase()[0],
+                                    style: const TextStyle(
+                                        color: MyColors.white, fontSize: 24),
+                                  )
+                                : null, // Replace with your default avatar image
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      overflow: TextOverflow.clip,
+                      FirebaseAuth.instance.currentUser!.displayName.toString(),
+                      style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: MyColors.white),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                        onPressed: () async {
+                          showEditAccountBottomSheet(context);
+                        },
+                        icon: const Icon(
+                          Icons.edit,
+                          color: MyColors.white,
+                        ))
+                  ],
+                ),
               ),
             ),
             const Divider(

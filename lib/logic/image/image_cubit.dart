@@ -14,9 +14,11 @@ class ImageCubit extends Cubit<ImageState> {
     try {
       final returnImage =
           await ImagePicker().pickImage(source: ImageSource.gallery);
-      selectedImage = File(returnImage!.path);
-      CacheData.setData(key: "uploadImage", value: returnImage.path);
-      emit(ImageSuccess(imageUrl: returnImage.path));
+      // selectedImage = File(returnImage!.path);
+      if (returnImage != null) {
+        CacheData.setData(key: "uploadImage", value: returnImage.path);
+        emit(ImageSuccess(imageUrl: returnImage.path));
+      }
     } on Exception catch (err) {
       emit(ImageFailure(message: err.toString()));
     }
