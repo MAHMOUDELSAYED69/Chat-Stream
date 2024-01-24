@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/core/helper/snackbar.dart';
 import 'package:hambolah_chat_app/firebase/functions.dart';
+import 'package:hambolah_chat_app/logic/change_name/change_name_cubit.dart';
 import 'package:hambolah_chat_app/logic/image/image_cubit.dart';
 import 'package:hambolah_chat_app/view/screen/settings/edit_account.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -56,8 +56,6 @@ class _SettingScreenState extends State<SettingScreen> {
                         }
                         if (state is ImageSuccess) {
                           isLoading = false;
-                          FirebaseAuthService.updateUserImage(
-                              urlImage: state.imageUrl);
                           imageUrl = state.imageUrl;
                         }
                         if (state is ImageFailure) {
@@ -101,13 +99,18 @@ class _SettingScreenState extends State<SettingScreen> {
                       },
                     ),
                     const SizedBox(width: 10),
-                    Text(
-                      overflow: TextOverflow.clip,
-                      FirebaseAuth.instance.currentUser!.displayName.toString(),
-                      style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: MyColors.white),
+                    BlocBuilder<ChangeNameCubit, ChangeNameState>(
+                      builder: (context, state) {
+                        return Text(
+                          overflow: TextOverflow.clip,
+                          FirebaseAuth.instance.currentUser!.displayName
+                              .toString(),
+                          style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: MyColors.white),
+                        );
+                      },
                     ),
                     const Spacer(),
                     IconButton(

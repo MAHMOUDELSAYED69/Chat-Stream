@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/core/helper/responsive.dart';
 import 'package:hambolah_chat_app/firebase/functions.dart';
+import 'package:hambolah_chat_app/logic/change_name/change_name_cubit.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../../core/helper/snackbar.dart';
 import '../../../logic/image/image_cubit.dart';
@@ -104,16 +105,34 @@ class _EditAccountState extends State<EditAccount> {
                         );
                       },
                     ),
-                    CustomTextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      onSaved: (data) {
-                        userName = data;
+                    BlocConsumer<ChangeNameCubit, ChangeNameState>(
+                      listener: (context, state) {
+                        if (state is ChangeNameLoading) {
+                          isLoading = true;
+                        }
+                        if (state is ChangeNameSuccess) {
+                          isLoading = false;
+                        }
+                        if (state is ChangeNameFailure) {
+                          isLoading = false;
+                          customSnackBar(context,
+                              "There was an error please try again later!");
+                          log(state.message);
+                        }
                       },
-                      title: "Change Name",
-                      titleTextStyle: const TextStyle(
-                          color: MyColors.lightGrey,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600),
+                      builder: (context, state) {
+                        return CustomTextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          onSaved: (data) {
+                            userName = data;
+                          },
+                          title: "Change Name",
+                          titleTextStyle: const TextStyle(
+                              color: MyColors.lightGrey,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600),
+                        );
+                      },
                     ),
                     SizedBox(height: 0.0288208 * ScreenSize.height),
                     Row(
@@ -134,8 +153,8 @@ class _EditAccountState extends State<EditAccount> {
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 formKey.currentState!.save();
-                                FirebaseAuthService.updateUserDisplayName(
-                                    name: userName);
+                                BlocProvider.of<ChangeNameCubit>(context)
+                                    .changeDisplayName(name: userName!);
                                 Navigator.pop(context);
                               }
                             },
