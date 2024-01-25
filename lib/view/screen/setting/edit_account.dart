@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/core/helper/responsive.dart';
-import 'package:hambolah_chat_app/firebase/functions.dart';
 import '../../../core/helper/snackbar.dart';
-import '../../../logic/change_name_cubit/change_name_cubit.dart';
-import '../../../logic/image/image_cubit.dart';
+import '../../../logic/setting/change_name_cubit/change_name_cubit.dart';
+import '../../../logic/setting/image/image_cubit.dart';
 import '../../widget/custom_button.dart';
 import '../../widget/custom_text_field.dart';
 

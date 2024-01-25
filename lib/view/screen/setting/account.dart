@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/firebase/functions.dart';
+import 'package:hambolah_chat_app/logic/auth/forget_password_cubit/forget_password_cubit.dart';
 import 'package:hambolah_chat_app/view/widget/setting_button.dart';
 
 import '../../../core/cache/cache_functions.dart';
@@ -44,27 +46,36 @@ class _AccountScreenState extends State<AccountScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            SettingButton(
-              title: "Change password",
-              icon: Icons.lock,
-              onTap: () {
-                customDialog(context, btnTitle: "Send", title: "Reset Password",
-                    onPressed: () {
-                  FirebaseAuthService.resetPassword(
-                      email:
-                          FirebaseAuth.instance.currentUser!.email.toString());
+            BlocListener<ForgetPasswordCubit, ForgetPasswordState>(
+              listener: (context, state) {
+                if (state is ForgetPasswordSuccess) {
                   Navigator.pop(context);
                   customSnackBar(context, "Check your E-mail and login again!");
+                  FirebaseAuthService.logOut();
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/login", (route) => false);
-                  FirebaseAuthService.logOut();
-                },
-                    widget: const Text(
-                      "Check your Email to reset your Password.",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                    ));
+                }
+                if (state is ForgetPasswordFailure) {
+                  customSnackBar(context, "There was an error!");
+                }
               },
+              child: SettingButton(
+                title: "Change password",
+                icon: Icons.lock,
+                onTap: () {
+                  customDialog(context,
+                      btnTitle: "Send", title: "Reset Password", onPressed: () {
+                    BlocProvider.of<ForgetPasswordCubit>(context).resetPassword(
+                        email: FirebaseAuth.instance.currentUser!.email
+                            .toString());
+                  },
+                      widget: const Text(
+                        "Check your Email to reset your Password.",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ));
+                },
+              ),
             ),
             SettingButton(
               title: "Change Email address",

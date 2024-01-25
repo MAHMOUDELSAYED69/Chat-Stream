@@ -18,12 +18,13 @@ void customSnackBar(BuildContext context, String message) {
 //! custom dialog
 Future<void> customDialog(BuildContext context,
     {required String title,
-    required String btnTitle,
+     String? btnTitle,
     TextEditingController? controller,
     void Function()? onPressed,
     TextInputType? keyboardType,
     bool isobscure = false,
     String? hintText,
+    Widget? textWidget,
     Widget? widget}) {
   return showDialog(
     context: context,
@@ -32,12 +33,15 @@ Future<void> customDialog(BuildContext context,
           side: BorderSide(color: MyColors.darkGrey),
           borderRadius: BorderRadius.all(Radius.circular(2))),
       backgroundColor: Colors.grey[50],
-      title: Text(
-        title,
-        style: const TextStyle(
-            fontSize: 24, fontWeight: FontWeight.w500, color: MyColors.black),
-        textAlign: TextAlign.center,
-      ),
+      title: textWidget ??
+          Text(
+            title,
+            style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+                color: MyColors.black),
+            textAlign: TextAlign.center,
+          ),
       content: widget ??
           TextField(
             keyboardType: keyboardType,
