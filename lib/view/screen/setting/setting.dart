@@ -22,6 +22,10 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   bool isImageLoading = false;
   String? imageUrl;
+  pickImage() {
+    BlocProvider.of<ImageCubit>(context).pickImageFromGallery();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,10 +68,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     },
                     builder: (context, state) {
                       return InkWell(
-                        onTap: () {
-                          BlocProvider.of<ImageCubit>(context)
-                              .pickImageFromGallery();
-                        },
+                        onTap: pickImage,
                         child: isImageLoading == true
                             ? const CircleAvatar(
                                 radius: 35,
@@ -118,9 +119,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   const Spacer(),
                   IconButton(
-                      onPressed: () async {
-                        showEditAccountBottomSheet(context);
-                      },
+                      onPressed: () => showEditAccountBottomSheet(context),
                       icon: const Icon(
                         Icons.edit,
                         color: MyColors.white,
@@ -163,7 +162,7 @@ class _SettingScreenState extends State<SettingScreen> {
               title: "Log Out",
               icon: Icons.logout,
               onTap: () {
-                FirebaseAuthService.logOut();
+              
                 Navigator.pushNamedAndRemoveUntil(
                     context, "/login", (route) => false);
               },
