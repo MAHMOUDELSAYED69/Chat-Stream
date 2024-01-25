@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/core/helper/snackbar.dart';
-import 'package:hambolah_chat_app/firebase/functions.dart';
+import 'package:hambolah_chat_app/logic/setting/log_out_cubit/log_out_cubit.dart';
 import 'package:hambolah_chat_app/view/screen/setting/edit_profile.dart';
 import '../../../logic/setting/change_name_cubit/change_name_cubit.dart';
 import '../../../logic/setting/upload_image_cubit/image_cubit.dart';
@@ -21,9 +21,14 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   bool isImageLoading = false;
+  bool isLogOutLoading = false;
   String? imageUrl;
   pickImage() {
     BlocProvider.of<ImageCubit>(context).pickImageFromGallery();
+  }
+
+  logOut() {
+    BlocProvider.of<LogOutCubit>(context).logOut();
   }
 
   @override
@@ -158,13 +163,32 @@ class _SettingScreenState extends State<SettingScreen> {
               icon: Icons.people_alt_sharp,
               onTap: () {},
             ),
-            SettingButton(
-              title: "Log Out",
-              icon: Icons.logout,
-              onTap: () {
-              
-                Navigator.pushNamedAndRemoveUntil(
-                    context, "/login", (route) => false);
+            BlocConsumer<LogOutCubit, LogOutState>(
+              listener: (context, state) {
+                if (state is LogOutLoading) {
+                  isLogOutLoading = true;
+                }
+                if (state is LogOutSuccess) {
+                  isLogOutLoading = false;
+                
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/login", (route) => false);
+                }
+                if (state is LogOutFailure) {
+                  isLogOutLoading = false;
+                  customSnackBar(context, "There was an error");
+                  log(state.message);
+                }
+              },
+              builder: (context, state) {
+                return SettingButton(
+                  title: "Log Out",
+                  icon: isLogOutLoading == false ? Icons.logout : null,
+                  widget: isLogOutLoading == true
+                      ? const CircularProgressIndicator()
+                      : null,
+                  onTap: logOut,
+                );
               },
             ),
             const Spacer(flex: 2),

@@ -8,7 +8,7 @@ part 'log_out_state.dart';
 
 class LogOutCubit extends Cubit<LogOutState> {
   LogOutCubit() : super(LogOutInitial());
-  Future<void> deleteAccount({required String password}) async {
+  Future<void> logOut() async {
     emit(LogOutLoading());
     try {
       await FirebaseAuthService.logOut();
