@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/core/constant/color.dart';
 import 'package:hambolah_chat_app/firebase/functions.dart';
 import 'package:hambolah_chat_app/logic/auth/forget_password_cubit/forget_password_cubit.dart';
+import 'package:hambolah_chat_app/logic/setting/delete_account_cubit/delete_account_cubit.dart';
 import 'package:hambolah_chat_app/view/widget/setting_button.dart';
 
 import '../../../core/cache/cache_functions.dart';
@@ -20,12 +21,6 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController deleteController = TextEditingController();
-  Future<void> delete() async {
-    await FirebaseAuthService.deleteUser(
-        email: FirebaseAuth.instance.currentUser!.email.toString(),
-        password: deleteController.text);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,42 +88,41 @@ class _AccountScreenState extends State<AccountScreen> {
                 });
               },
             ),
-            SettingButton(
-              title: "Delete account",
-              icon: Icons.delete,
-              onTap: () {
-                customDialog(
-                  context,
-                  keyboardType: TextInputType.visiblePassword,
-                  btnTitle: "DELETE",
-                  title: "Warrning",
-                  controller: deleteController,
-                  isobscure: true,
-                  onPressed: () async {
-                    try {
-                      if (deleteController.text.isNotEmpty &&
-                          deleteController.text.length >= 6) {
-                        await delete();
-                        deleteController.clear();
-                        if (FirebaseAuth.instance.currentUser == null) {
-                          CacheData.clearData(clearData: true);
-                          // ignore: use_build_context_synchronously
-                          customSnackBar(
-                              context, "User account deleted successfully.");
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, "/login", (route) => false);
-                        }
-                      }
-                    } on Exception catch (err) {
-                      log(err.toString());
-                      // ignore: use_build_context_synchronously
-                      customSnackBar(context,
-                          "there was an error please try again later!");
-                    }
-                  },
-                );
+            BlocListener<DeleteAccountCubit, DeleteAccountState>(
+              listener: (context, state) {
+                if (state is DeleteAccountSuccess) {
+                  Navigator.pop(context);
+                  FocusScope.of(context).unfocus();
+                  customSnackBar(context, "User account deleted successfully!");
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/login", (route) => false);
+                }
+                if (state is DeleteAccountFailure) {
+                  customSnackBar(context, "There was an error!");
+                  log(state.message);
+                }
               },
+              child: SettingButton(
+                title: "Delete account",
+                icon: Icons.delete,
+                onTap: () {
+                  customDialog(
+                    context,
+                    keyboardType: TextInputType.visiblePassword,
+                    btnTitle: "DELETE",
+                    title: "Warrning",
+                    controller: deleteController,
+                    isobscure: true,
+                    onPressed: () {
+                      if (deleteController.text.isNotEmpty &&
+                          deleteController.text.length >= 5) {
+                        BlocProvider.of<DeleteAccountCubit>(context)
+                            .deleteAccount(password: deleteController.text);
+                      }
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
