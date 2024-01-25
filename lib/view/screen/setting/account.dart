@@ -7,8 +7,6 @@ import 'package:hambolah_chat_app/firebase/functions.dart';
 import 'package:hambolah_chat_app/logic/auth/forget_password_cubit/forget_password_cubit.dart';
 import 'package:hambolah_chat_app/logic/setting/delete_account_cubit/delete_account_cubit.dart';
 import 'package:hambolah_chat_app/view/widget/setting_button.dart';
-
-import '../../../core/cache/cache_functions.dart';
 import '../../../core/helper/snackbar.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -21,6 +19,24 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController deleteController = TextEditingController();
+  resetPassword() {
+    BlocProvider.of<ForgetPasswordCubit>(context).resetPassword(
+        email: FirebaseAuth.instance.currentUser!.email.toString());
+  }
+
+  deleteAccount() {
+    if (deleteController.text.isNotEmpty && deleteController.text.length >= 5) {
+      BlocProvider.of<DeleteAccountCubit>(context)
+          .deleteAccount(password: deleteController.text);
+    }
+  }
+
+  changeEmail() {
+    if (emailController.text.isNotEmpty) {
+      FirebaseAuthService.changeEmail(emailController.text);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,11 +75,9 @@ class _AccountScreenState extends State<AccountScreen> {
                 icon: Icons.lock,
                 onTap: () {
                   customDialog(context,
-                      btnTitle: "Send", title: "Reset Password", onPressed: () {
-                    BlocProvider.of<ForgetPasswordCubit>(context).resetPassword(
-                        email: FirebaseAuth.instance.currentUser!.email
-                            .toString());
-                  },
+                      btnTitle: "Send",
+                      title: "Reset Password",
+                      onPressed: resetPassword,
                       widget: const Text(
                         "Check your Email to reset your Password.",
                         style: TextStyle(
@@ -76,16 +90,15 @@ class _AccountScreenState extends State<AccountScreen> {
               title: "Change Email address",
               icon: Icons.email,
               onTap: () {
-                customDialog(context,
-                    keyboardType: TextInputType.emailAddress,
-                    btnTitle: "Change",
-                    title: "New Email",
-                    hintText: "Email",
-                    controller: emailController, onPressed: () {
-                  if (emailController.text.isNotEmpty) {
-                    FirebaseAuthService.changeEmail(emailController.text);
-                  }
-                });
+                customDialog(
+                  context,
+                  keyboardType: TextInputType.emailAddress,
+                  btnTitle: "Change",
+                  title: "New Email",
+                  hintText: "Email",
+                  controller: emailController,
+                  onPressed: changeEmail,
+                );
               },
             ),
             BlocListener<DeleteAccountCubit, DeleteAccountState>(
@@ -113,13 +126,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     title: "Warrning",
                     controller: deleteController,
                     isobscure: true,
-                    onPressed: () {
-                      if (deleteController.text.isNotEmpty &&
-                          deleteController.text.length >= 5) {
-                        BlocProvider.of<DeleteAccountCubit>(context)
-                            .deleteAccount(password: deleteController.text);
-                      }
-                    },
+                    onPressed: deleteAccount,
                   );
                 },
               ),
