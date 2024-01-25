@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hambolah_chat_app/logic/change_name/change_name_cubit.dart';
+import 'package:hambolah_chat_app/logic/auth/forget_password_cubit/forget_password_cubit.dart';
 import '../../logic/auth/login_cubit/login_cubit.dart';
 import '../../logic/auth/register_cubit/register_cubit.dart';
+import '../../logic/change_name_cubit/change_name_cubit.dart';
 import '../../logic/image/image_cubit.dart';
 import '../screen/auth/forget_password.dart';
 import '../screen/home/home.dart';
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ChangeNameCubit(),
+        ),
+        BlocProvider(
+          create: (context) => ForgetPasswordCubit(),
         ),
       ],
       child: MaterialApp(
