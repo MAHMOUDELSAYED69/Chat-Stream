@@ -10,7 +10,7 @@ class ChangeNameCubit extends Cubit<ChangeNameState> {
   Future<void> changeDisplayName({required String name}) async {
     emit(ChangeNameLoading());
     try {
-      await FirebaseAuthService.updateUserDisplayName(name: name);
+      await FirebaseService.updateUserDisplayName(name: name);
       emit(ChangeNameSuccess());
     } on FirebaseAuthException catch (err) {
       emit(ChangeNameFailure(message: err.code));

@@ -33,7 +33,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   changeEmail() {
     if (emailController.text.isNotEmpty) {
-      FirebaseAuthService.changeEmail(emailController.text);
+      FirebaseService.changeEmail(emailController.text);
     }
   }
 
@@ -62,7 +62,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 if (state is ForgetPasswordSuccess) {
                   Navigator.pop(context);
                   customSnackBar(context, "Check your E-mail and login again!");
-                  FirebaseAuthService.logOut();
+                  FirebaseService.logOut();
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/login", (route) => false);
                 }

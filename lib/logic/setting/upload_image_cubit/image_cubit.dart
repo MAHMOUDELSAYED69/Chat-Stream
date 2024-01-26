@@ -18,7 +18,7 @@ class ImageCubit extends Cubit<ImageState> {
           await ImagePicker().pickImage(source: ImageSource.gallery);
       // selectedImage = File(returnImage!.path);
       if (returnImage != null) {
-        await FirebaseAuthService.updateUserImage(urlImage: returnImage.path);
+        await FirebaseService.updateUserImage(urlImage: returnImage.path);
         CacheData.setData(key: "uploadImage", value: returnImage.path);
         emit(ImageSuccess(imageUrl: returnImage.path));
       }

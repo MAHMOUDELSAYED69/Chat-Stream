@@ -12,7 +12,7 @@ class DeleteAccountCubit extends Cubit<DeleteAccountState> {
   Future<void> deleteAccount({required String password}) async {
     emit(DeleteAccountLoading());
     try {
-      await FirebaseAuthService.deleteUser(
+      await FirebaseService.deleteUser(
           email: FirebaseAuth.instance.currentUser!.email.toString(),
           password: password);
       if (FirebaseAuth.instance.currentUser == null) {

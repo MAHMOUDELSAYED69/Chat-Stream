@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 name: "Mahmoud",
                 lastMessage: "hello every boding",
                 time: "7.56 AM"),
-            ChatCard(
+            ChatCard( 
                 onTap: () {},
                 circleAvatar: "M",
                 name: "Mahmoud",

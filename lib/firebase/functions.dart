@@ -1,7 +1,47 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class FirebaseAuthService {
+import '../core/cache/cache_functions.dart';
+
+class FirebaseService {
+  //! REGISTER
+  static Future<void> register(
+      {required String email, required String password}) async {
+    UserCredential userCredential =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    await FirebaseAuth.instance.currentUser!
+        .updateDisplayName(CacheData.getdata(key: "displayName"));
+    FirebaseService.emailVerify();
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .set({
+      'uid': userCredential.user!.uid,
+      'email': userCredential.user!.uid,
+    });
+  }
+
+  static Future<void> logIn(
+      {required String email, required String password}) async {
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .set({
+      'uid': userCredential.user!.uid,
+      'email': userCredential.user!.email,
+    }, SetOptions(merge: true));
+  }
+
   //! RESET PASSWORD
   static Future<void> resetPassword({required String email}) async {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
@@ -87,4 +127,6 @@ class FirebaseAuthService {
     await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
     log(FirebaseAuth.instance.currentUser!.displayName.toString());
   }
+
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 }

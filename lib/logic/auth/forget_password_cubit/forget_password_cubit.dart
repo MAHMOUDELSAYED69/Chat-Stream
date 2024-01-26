@@ -11,7 +11,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   Future<void> resetPassword({required String email}) async {
     emit(ForgetPasswordLoading());
     try {
-      await FirebaseAuthService.resetPassword(email: email);
+      await FirebaseService.resetPassword(email: email);
       emit(ForgetPasswordSuccess());
     } on FirebaseAuthException catch (err) {
       emit(ForgetPasswordFailure(message: err.code));

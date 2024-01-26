@@ -46,7 +46,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 context, "/home", (route) => false);
           } else {
             customSnackBar(context, "Please verify your Email");
-            FirebaseAuthService.emailVerify();
+            FirebaseService.emailVerify();
           }
         }
         if (state is LoginFailure) {
