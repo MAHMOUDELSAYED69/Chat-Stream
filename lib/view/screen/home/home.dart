@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constant/color.dart';
+import '../../widget/custom_chat_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,6 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.darkGrey,
       appBar: AppBar(
         elevation: BorderSide.strokeAlignOutside,
         backgroundColor: MyColors.purple,
@@ -41,15 +43,28 @@ class _HomeScreenState extends State<HomeScreen> {
               )),
         ],
       ),
-      body: const Center(
+      body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Welcome to Home Screen",
-              style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
+            const SizedBox(height: 10),
+            ChatCard(
+                onTap: () {},
+                circleAvatar: "M",
+                name: "Mahmoud",
+                lastMessage: "hello every boding",
+                time: "7.56 AM"),
+            ChatCard(
+                onTap: () {},
+                circleAvatar: "M",
+                name: "Mahmoud",
+                lastMessage: "hello every boding",
+                time: "7.56 AM"),
+            ChatCard(
+                onTap: () {},
+                circleAvatar: "M",
+                name: "Mahmoud",
+                lastMessage: "hello every boding",
+                time: "7.56 AM"),
           ],
         ),
       ),
