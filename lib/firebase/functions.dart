@@ -25,6 +25,7 @@ class FirebaseService {
     });
   }
 
+//! LOGIN
   static Future<void> logIn(
       {required String email, required String password}) async {
     UserCredential userCredential =
@@ -32,7 +33,7 @@ class FirebaseService {
       email: email,
       password: password,
     );
-
+  
     FirebaseFirestore.instance
         .collection('users')
         .doc(userCredential.user!.uid)
