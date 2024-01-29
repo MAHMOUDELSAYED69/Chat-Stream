@@ -115,7 +115,6 @@ class FirebaseService {
       }
     } catch (e) {
       log("Error updating email: $e]");
-      // Handle the error as needed
     }
   }
 

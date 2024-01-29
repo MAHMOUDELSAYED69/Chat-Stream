@@ -7,7 +7,11 @@ class ChatCardInitial extends ChatCardState {}
 
 class ChatCardLoading extends ChatCardState {}
 
-class ChatCardSuccess extends ChatCardState {}
+class ChatCardSuccess extends ChatCardState {
+  final dynamic data;
+
+  ChatCardSuccess({required this.data});
+}
 
 class ChatCardFailure extends ChatCardState {
   final String message;
