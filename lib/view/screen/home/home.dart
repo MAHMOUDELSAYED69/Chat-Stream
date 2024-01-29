@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
 
 import '../../../core/constant/color.dart';
 import '../../../logic/chat/chat_card_cubit/chat_card_cubit.dart';
@@ -12,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<ChatCardModel> chats = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextStyle(fontWeight: FontWeight.w500, color: MyColors.black)),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+               
+              },
               icon: const Icon(
                 Icons.search,
                 color: MyColors.black,
@@ -45,33 +51,35 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: BlocBuilder<ChatCardCubit, ChatCardState>(
-  builder: (context, state) {
-    if (state is ChatCardLoading) {
-      // Display a loading indicator
-      return const CircularProgressIndicator();
-    } else if (state is ChatCardSuccess) {
-      final data = state.data;
-      
-      return ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          final item = data[index];
-          return ListTile(
-            title: Text(item.title),
-            subtitle: Text(item.subtitle),
-            // Add more widgets to display other data fields as needed
-          );
+        builder: (context, state) {
+          if (state is ChatCardLoading) {
+            return const CircularProgressIndicator();
+          } else if (state is ChatCardSuccess) {
+            chats = state.data;
+            log(state.data.toString());
+            return ListView.builder(
+              itemCount: chats.length,
+              itemBuilder: (context, index) {
+                log(chats[index].email);
+                return ListTile(
+                  title: Text(
+                    chats[index].email,
+                    style: const TextStyle(color: MyColors.white),
+                  ),
+                  subtitle: Text(
+                    chats[index].uid,
+                    style: const TextStyle(color: MyColors.white),
+                  ),
+                );
+              },
+            );
+          } else if (state is ChatCardFailure) {
+            return Text('Error: ${state.message}');
+          } else {
+            return Container();
+          }
         },
-      );
-    } else if (state is ChatCardFailure) {
-      // Display an error message
-      return Text('Error: ${state.message}');
-    } else {
-      // Initial state or other states not handled explicitly
-      return Container();
-    }
-  },
-),
+      ),
       // body: Center(
       //   child: Column(
       //     children: [
@@ -88,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //           name: "Mahmoud",
       //           lastMessage: "hello every boding",
       //           time: "7.56 AM"),
-      //       ChatCard( 
+      //       ChatCard(
       //           onTap: () {},
       //           circleAvatar: "M",
       //           name: "Mahmoud",

@@ -9,6 +9,7 @@ import 'package:hambolah_chat_app/logic/auth/login_cubit/login_cubit.dart';
 import 'package:hambolah_chat_app/view/screen/auth/forget_password.dart';
 import 'package:hambolah_chat_app/view/widget/custom_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import '../../../logic/chat/chat_card_cubit/chat_card_cubit.dart';
 import '../../widget/custom_text_field.dart';
 
 class LogInScreen extends StatefulWidget {
@@ -44,6 +45,7 @@ class _LogInScreenState extends State<LogInScreen> {
           if (FirebaseAuth.instance.currentUser!.emailVerified) {
             Navigator.pushNamedAndRemoveUntil(
                 context, "/home", (route) => false);
+          
           } else {
             customSnackBar(context, "Please verify your Email");
             FirebaseService.emailVerify();

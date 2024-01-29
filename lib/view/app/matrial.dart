@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/logic/auth/forget_password_cubit/forget_password_cubit.dart';
+import 'package:hambolah_chat_app/logic/chat/chat_card_cubit/chat_card_cubit.dart';
 import 'package:hambolah_chat_app/logic/setting/delete_account_cubit/delete_account_cubit.dart';
 import 'package:hambolah_chat_app/logic/setting/log_out_cubit/log_out_cubit.dart';
 import '../../logic/auth/login_cubit/login_cubit.dart';
@@ -42,6 +43,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => LogOutCubit(),
+        ),
+        BlocProvider(
+          create: (context) => ChatCardCubit(),
         ),
       ],
       child: MaterialApp(
