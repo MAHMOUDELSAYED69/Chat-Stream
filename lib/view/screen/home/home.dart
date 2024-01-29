@@ -33,9 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextStyle(fontWeight: FontWeight.w500, color: MyColors.black)),
         actions: [
           IconButton(
-              onPressed: () {
-               
-              },
+              onPressed: () {},
               icon: const Icon(
                 Icons.search,
                 color: MyColors.black,
@@ -53,10 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocBuilder<ChatCardCubit, ChatCardState>(
         builder: (context, state) {
           if (state is ChatCardLoading) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else if (state is ChatCardSuccess) {
             chats = state.data;
-            log(state.data.toString());
             return ListView.builder(
               itemCount: chats.length,
               itemBuilder: (context, index) {
@@ -73,7 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             );
-          } else if (state is ChatCardFailure) {
+          }
+          if (state is ChatCardFailure) {
             return Text('Error: ${state.message}');
           } else {
             return Container();

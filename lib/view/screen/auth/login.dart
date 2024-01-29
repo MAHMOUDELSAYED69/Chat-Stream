@@ -45,7 +45,7 @@ class _LogInScreenState extends State<LogInScreen> {
           if (FirebaseAuth.instance.currentUser!.emailVerified) {
             Navigator.pushNamedAndRemoveUntil(
                 context, "/home", (route) => false);
-          
+            BlocProvider.of<ChatCardCubit>(context).buildChatCard();
           } else {
             customSnackBar(context, "Please verify your Email");
             FirebaseService.emailVerify();
