@@ -6,6 +6,7 @@ import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
 
 import '../../../core/constant/color.dart';
 import '../../../logic/chat/chat_card_cubit/chat_card_cubit.dart';
+import '../../widget/custom_chat_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +17,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<ChatCardModel> chats = [];
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<ChatCardCubit>(context).buildChatCard();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,16 +65,12 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: chats.length,
               itemBuilder: (context, index) {
                 log(chats[index].email);
-                return ListTile(
-                  title: Text(
-                    chats[index].email,
-                    style: const TextStyle(color: MyColors.white),
-                  ),
-                  subtitle: Text(
-                    chats[index].uid,
-                    style: const TextStyle(color: MyColors.white),
-                  ),
-                );
+                return ChatCard(
+                    onTap: () {},
+                    circleAvatar: "M",
+                    name: chats[index].email,
+                    lastMessage: chats[index].uid,
+                    time: "7.56 AM");
               },
             );
           }

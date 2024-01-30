@@ -42,23 +42,32 @@ class ChatCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                      fontSize: 24,
-                      color: MyColors.white,
-                      fontWeight: FontWeight.w500),
+                SizedBox(
+                  width: 250,
+                  child: Text(
+                    name,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 24,
+                        color: MyColors.white,
+                        fontWeight: FontWeight.w500),
+                  ),
                 ),
-                Text(
-                  lastMessage,
-                  style:
-                      const TextStyle(fontSize: 16, color: MyColors.lightGrey),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    lastMessage,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 16, color: MyColors.lightGrey),
+                  ),
                 ),
               ],
             ),
             const Spacer(),
             Text(time,
-                style: const TextStyle(fontSize: 16, color: MyColors.lightGrey))
+                style:
+                    const TextStyle(fontSize: 16, color: MyColors.lightGrey)),
           ],
         ),
       ),
