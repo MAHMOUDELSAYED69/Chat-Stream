@@ -9,6 +9,7 @@ import '../../logic/auth/register_cubit/register_cubit.dart';
 import '../../logic/setting/change_name_cubit/change_name_cubit.dart';
 import '../../logic/setting/upload_image_cubit/image_cubit.dart';
 import '../screen/auth/forget_password.dart';
+import '../screen/home/chat.dart';
 import '../screen/home/home.dart';
 import '../screen/auth/login.dart';
 import '../screen/auth/register.dart';
@@ -59,9 +60,9 @@ class MyApp extends StatelessWidget {
           "/forget": (context) => const ForgetPassword(),
           "/setting": (context) => const SettingScreen(),
           "/account": (context) => const AccountScreen(),
+          "/chat": (context) => const ChatScreen(),
         },
       ),
     );
   }
 }
- 

@@ -66,7 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 log(chats[index].email);
                 return ChatCard(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, "/chat",arguments: chats[index].email);
+                    },
                     circleAvatar: "M",
                     name: chats[index].email,
                     lastMessage: chats[index].uid,
@@ -81,31 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
-      // body: Center(
-      //   child: Column(
-      //     children: [
-      //       const SizedBox(height: 10),
-      //       ChatCard(
-      //           onTap: () {},
-      //           circleAvatar: "M",
-      //           name: "Mahmoud",
-      //           lastMessage: "hello every boding",
-      //           time: "7.56 AM"),
-      //       ChatCard(
-      //           onTap: () {},
-      //           circleAvatar: "M",
-      //           name: "Mahmoud",
-      //           lastMessage: "hello every boding",
-      //           time: "7.56 AM"),
-      //       ChatCard(
-      //           onTap: () {},
-      //           circleAvatar: "M",
-      //           name: "Mahmoud",
-      //           lastMessage: "hello every boding",
-      //           time: "7.56 AM"),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
