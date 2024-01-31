@@ -8,6 +8,7 @@ class FirebaseService {
   //! REGISTER
   static Future<void> register(
       {required String email, required String password}) async {
+        
     UserCredential userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
