@@ -94,15 +94,18 @@ class _SettingScreenState extends State<SettingScreen> {
                                         FirebaseAuth.instance.currentUser!
                                                 .photoURL ==
                                             null
-                                    ? Text(
-                                        FirebaseAuth
-                                            .instance.currentUser!.displayName
-                                            .toString()
-                                            .toUpperCase()[0],
-                                        style: const TextStyle(
-                                            color: MyColors.white,
-                                            fontSize: 24),
-                                      )
+                                    ? SizedBox(
+                                      child: Text(
+                                          FirebaseAuth
+                                              .instance.currentUser!.displayName
+                                              .toString()
+                                              .toUpperCase()[0],
+                                              overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              color: MyColors.white,
+                                              fontSize: 24),
+                                        ),
+                                    )
                                     : null, // Replace with your default avatar image
                               ),
                       );

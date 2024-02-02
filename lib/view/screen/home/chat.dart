@@ -1,10 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/constant/color.dart';
 import '../../../core/helper/responsive.dart';
+import '../../widget/custom_chat_text_field.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final String parameter =
@@ -25,7 +35,11 @@ class ChatScreen extends StatelessWidget {
             style:
                 TextStyle(fontWeight: FontWeight.w500, color: MyColors.black)),
       ),
-      bottomNavigationBar: const CustomChatTextField(),
+      bottomNavigationBar: CustomChatTextField(
+        controller: textEditingController,
+        onPressed: () => textEditingController.text,
+        onSubmitted: (_) => textEditingController.text,
+      ),
       body: Container(
         alignment: Alignment.center,
         width: ScreenSize.width,
@@ -36,72 +50,6 @@ class ChatScreen extends StatelessWidget {
               style: const TextStyle(color: MyColors.white),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class CustomChatTextField extends StatefulWidget {
-  const CustomChatTextField({
-    super.key,
-  });
-
-  @override
-  State<CustomChatTextField> createState() => _CustomChatTextFieldState();
-}
-
-class _CustomChatTextFieldState extends State<CustomChatTextField> {
-  final TextEditingController writeMessageController = TextEditingController();
-  bool foucsColor = false;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-      child: Padding(
-        padding: const EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 5),
-        child: TextField(
-          cursorColor: foucsColor ? MyColors.purple : MyColors.lightGrey,
-          controller: writeMessageController,
-          onTap: () {
-            foucsColor = true;
-            setState(() {});
-          },
-          onSubmitted: (_) {},
-          onTapOutside: (_) {
-            foucsColor = false;
-            setState(() {});
-          },
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: MyColors.darkGrey2,
-            hintText: '  Write your message',
-            hintStyle: const TextStyle(color: MyColors.lightGrey),
-            suffixIcon: IconButton(
-              onPressed: () {},
-              icon: Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Icon(
-                  Icons.send_rounded,
-                  color: foucsColor ? MyColors.purple : MyColors.lightGrey,
-                  size: 30,
-                ),
-              ),
-            ),
-            border: const OutlineInputBorder(),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                width: 2,
-                color: Colors.grey,
-              ),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                width: 2,
-                color: MyColors.purple,
-              ),
-            ),
-          ),
         ),
       ),
     );
