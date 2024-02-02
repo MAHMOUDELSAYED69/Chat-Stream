@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       Navigator.pushNamed(context, "/chat",arguments: chats[index].email);
                     },
-                    circleAvatar: "M",
+                    circleAvatar: chats[index].email[0],
                     name: chats[index].email,
                     lastMessage: chats[index].uid,
                     time: "7.56 AM");
