@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hambolah_chat_app/view/widget/custom_add_friend_card.dart';
 
 import '../../../core/constant/color.dart';
 
@@ -30,6 +31,12 @@ class AddFriend extends StatelessWidget {
               )),
         ],
       ),
+      body: const Column(children: [
+        AddFriendCard(
+          circleAvatar: "",
+          name: "name",
+        )
+      ]),
     );
   }
 }
