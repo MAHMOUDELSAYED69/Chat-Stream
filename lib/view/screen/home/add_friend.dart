@@ -1,10 +1,26 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
 import 'package:hambolah_chat_app/view/widget/custom_add_friend_card.dart';
 
 import '../../../core/constant/color.dart';
+import '../../../logic/chat/chat_card_cubit/chat_card_cubit.dart';
 
-class AddFriend extends StatelessWidget {
-  const AddFriend({super.key});
+class AddFriendScreen extends StatefulWidget {
+  const AddFriendScreen({super.key});
+
+  @override
+  State<AddFriendScreen> createState() => _AddFriendScreenState();
+}
+
+class _AddFriendScreenState extends State<AddFriendScreen> {
+  List<ChatCardModel> chats = [];
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<ChatCardCubit>(context).buildChatCard();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +47,28 @@ class AddFriend extends StatelessWidget {
                 )),
           ],
         ),
-        body: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
-          itemCount: 20,
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) =>
-              const AddFriendCard(circleAvatar: "M", name: "Mahmoud El Sayed"),
+        body: BlocBuilder<ChatCardCubit, ChatCardState>(
+          builder: (context, state) {
+            if (state is ChatCardLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is ChatCardSuccess) {
+              chats = state.data;
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                itemCount: chats.length,
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) => AddFriendCard(
+                    circleAvatar: chats[index].email[0],
+                    name: chats[index].email),
+              );
+            }
+            if (state is ChatCardFailure) {
+              return Text('Error: ${state.message}');
+            } else {
+              return Container();
+            }
+          },
         ));
   }
 }

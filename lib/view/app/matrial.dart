@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
           "/setting": (context) => const SettingScreen(),
           "/account": (context) => const AccountScreen(),
           "/chat": (context) => const ChatScreen(),
-          "/addFriend": (context) => const AddFriend(),
+          "/addFriend": (context) => const AddFriendScreen(),
         },
       ),
     );
