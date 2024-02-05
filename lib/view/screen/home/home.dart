@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
@@ -27,6 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.darkGrey,
+      floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.pushNamed(context, "/addFriend"),
+          backgroundColor: MyColors.purple,
+          child: const Icon(
+            Icons.add,
+            size: 30,
+          )),
       appBar: AppBar(
         elevation: BorderSide.strokeAlignOutside,
         backgroundColor: MyColors.purple,
@@ -67,7 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 log(chats[index].email);
                 return ChatCard(
                     onTap: () {
-                      Navigator.pushNamed(context, "/chat",arguments: chats[index].email);
+                      Navigator.pushNamed(context, "/chat",
+                          arguments: chats[index].email);
                     },
                     circleAvatar: chats[index].email[0],
                     name: chats[index].email,

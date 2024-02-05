@@ -4,6 +4,7 @@ import 'package:hambolah_chat_app/logic/auth/forget_password_cubit/forget_passwo
 import 'package:hambolah_chat_app/logic/chat/chat_card_cubit/chat_card_cubit.dart';
 import 'package:hambolah_chat_app/logic/setting/delete_account_cubit/delete_account_cubit.dart';
 import 'package:hambolah_chat_app/logic/setting/log_out_cubit/log_out_cubit.dart';
+import 'package:hambolah_chat_app/view/screen/home/add_friend.dart';
 import '../../logic/auth/login_cubit/login_cubit.dart';
 import '../../logic/auth/register_cubit/register_cubit.dart';
 import '../../logic/setting/change_name_cubit/change_name_cubit.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
           "/setting": (context) => const SettingScreen(),
           "/account": (context) => const AccountScreen(),
           "/chat": (context) => const ChatScreen(),
+          "/addFriend": (context) => const AddFriend(),
         },
       ),
     );
