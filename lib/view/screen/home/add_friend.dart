@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
+import 'package:hambolah_chat_app/logic/chat/add_friend_cubit/add_friend_cubit.dart';
 import 'package:hambolah_chat_app/view/widget/custom_add_friend_card.dart';
 
 import '../../../core/constant/color.dart';
-import '../../../logic/chat/chat_card_cubit/chat_card_cubit.dart';
 
 class AddFriendScreen extends StatefulWidget {
   const AddFriendScreen({super.key});
@@ -18,7 +18,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ChatCardCubit>(context).buildChatCard();
+    BlocProvider.of<AddFriendCubit>(context).buildAddFriendCard();
   }
 
   @override
@@ -46,11 +46,11 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                 )),
           ],
         ),
-        body: BlocBuilder<ChatCardCubit, ChatCardState>(
+        body: BlocBuilder<AddFriendCubit, AddFriendState>(
           builder: (context, state) {
-            if (state is ChatCardLoading) {
+            if (state is AddFriendLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is ChatCardSuccess) {
+            } else if (state is AddFriendSuccess) {
               chats = state.data;
               return GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -64,7 +64,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                 ),
               );
             }
-            if (state is ChatCardFailure) {
+            if (state is AddFriendFailure) {
               return Text('Error: ${state.message}');
             } else {
               return Container();
