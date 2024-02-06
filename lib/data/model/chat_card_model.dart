@@ -1,10 +1,17 @@
 class ChatCardModel {
   final String email;
   final String uid;
+  final String? image;
+  final String? name;
 
-  ChatCardModel({required this.email, required this.uid});
+  ChatCardModel(
+      {this.image, this.name, required this.email, required this.uid});
 
   factory ChatCardModel.fromJson(dynamic jsonData) {
-    return ChatCardModel(email: jsonData['email'], uid: jsonData['uid']);
+    return ChatCardModel(
+        email: jsonData['email'],
+        uid: jsonData['uid'],
+        image: jsonData['image'],
+        name: jsonData['name']);
   }
 }

@@ -76,8 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.pushNamed(context, "/chat",
                           arguments: chats[index].email);
                     },
-                    circleAvatar: chats[index].email[0],
-                    name: chats[index].email,
+                    imagepath: chats[index].image,
+                    circleAvatar: chats[index].name![0].toUpperCase(),
+                    name: chats[index].name!,
                     lastMessage: chats[index].uid,
                     time: "7.56 AM");
               },

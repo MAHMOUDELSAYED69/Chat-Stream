@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
@@ -59,8 +58,10 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                 itemCount: chats.length,
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) => AddFriendCard(
-                    circleAvatar: chats[index].email[0],
-                    name: chats[index].email),
+                  circleAvatar: chats[index].name![0].toUpperCase(),
+                  name: chats[index].name!,
+                  imagePath: chats[index].image,
+                ),
               );
             }
             if (state is ChatCardFailure) {

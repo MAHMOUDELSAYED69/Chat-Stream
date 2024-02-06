@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hambolah_chat_app/firebase/functions.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
@@ -11,6 +13,7 @@ class ImageCubit extends Cubit<ImageState> {
   ImageCubit() : super(ImageInitial());
 
   File? selectedImage;
+
   Future<void> pickImageFromGallery() async {
     emit(Imageloading());
     try {
@@ -19,6 +22,11 @@ class ImageCubit extends Cubit<ImageState> {
       // selectedImage = File(returnImage!.path);
       if (returnImage != null) {
         await FirebaseService.updateUserImage(urlImage: returnImage.path);
+
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({'image': returnImage.path}, SetOptions(merge: true));
         CacheData.setData(key: "uploadImage", value: returnImage.path);
         emit(ImageSuccess(imageUrl: returnImage.path));
       }

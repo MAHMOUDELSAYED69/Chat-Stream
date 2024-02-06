@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hambolah_chat_app/view/widget/custom_button.dart';
 
@@ -9,10 +11,12 @@ class AddFriendCard extends StatefulWidget {
     this.onTap,
     required this.circleAvatar,
     required this.name,
+    this.imagePath,
   });
   final void Function()? onTap;
   final String circleAvatar;
   final String name;
+  final String? imagePath;
 
   @override
   State<AddFriendCard> createState() => _AddFriendCardState();
@@ -35,10 +39,15 @@ class _AddFriendCardState extends State<AddFriendCard> {
           CircleAvatar(
             radius: 40,
             backgroundColor: MyColors.darkGrey,
-            child: Text(
-              widget.circleAvatar,
-              style: const TextStyle(fontSize: 20, color: MyColors.white),
-            ),
+            backgroundImage: widget.imagePath != null
+                ? FileImage(File(widget.imagePath!))
+                : null,
+            child: widget.imagePath == null
+                ? Text(
+                    widget.circleAvatar,
+                    style: const TextStyle(fontSize: 20, color: MyColors.white),
+                  )
+                : null,
           ),
           const SizedBox(height: 10),
           Text(

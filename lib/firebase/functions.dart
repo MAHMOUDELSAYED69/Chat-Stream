@@ -8,7 +8,6 @@ class FirebaseService {
   //! REGISTER
   static Future<void> register(
       {required String email, required String password}) async {
-        
     UserCredential userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
@@ -23,6 +22,8 @@ class FirebaseService {
         .set({
       'uid': userCredential.user!.uid,
       'email': userCredential.user!.uid,
+      'name': userCredential.user!.displayName,
+      'image': userCredential.user?.photoURL
     });
   }
 
@@ -34,13 +35,15 @@ class FirebaseService {
       email: email,
       password: password,
     );
-  
+
     FirebaseFirestore.instance
         .collection('users')
         .doc(userCredential.user!.uid)
         .set({
       'uid': userCredential.user!.uid,
       'email': userCredential.user!.email,
+      'name': userCredential.user!.displayName,
+      'image': userCredential.user?.photoURL
     }, SetOptions(merge: true));
   }
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../core/constant/color.dart';
@@ -10,12 +12,14 @@ class ChatCard extends StatelessWidget {
     required this.name,
     required this.lastMessage,
     required this.time,
+    this.imagepath,
   });
   final void Function()? onTap;
   final String circleAvatar;
   final String name;
   final String lastMessage;
   final String time;
+  final String? imagepath;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +36,15 @@ class ChatCard extends StatelessWidget {
             CircleAvatar(
               radius: 30,
               backgroundColor: MyColors.darkGrey,
-              child: Text(
-                circleAvatar,
-                style: const TextStyle(fontSize: 20, color: MyColors.white),
-              ),
+              backgroundImage:
+                  imagepath != null ? FileImage(File(imagepath!)) : null,
+              child: imagepath == null
+                  ? Text(
+                      circleAvatar,
+                      style:
+                          const TextStyle(fontSize: 20, color: MyColors.white),
+                    )
+                  : null,
             ),
             const SizedBox(width: 20),
             Column(
