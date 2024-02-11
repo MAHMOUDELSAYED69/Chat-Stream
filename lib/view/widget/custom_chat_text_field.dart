@@ -33,10 +33,10 @@ class _CustomChatTextFieldState extends State<CustomChatTextField> {
             setState(() {});
           },
           onSubmitted: widget.onSubmitted,
-          onTapOutside: (_) {
-            foucsColor = false;
-            setState(() {});
-          },
+          // onTapOutside: (_) {
+          //   foucsColor = false;
+          //   setState(() {});
+          // },
           style: const TextStyle(color: MyColors.white),
           decoration: InputDecoration(
             filled: true,

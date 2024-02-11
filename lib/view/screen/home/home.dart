@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return ChatCard(
                     onTap: () {
                       Navigator.pushNamed(context, "/chat",
-                          arguments: chats[index].email);
+                          arguments: chats[index].uid);
                     },
                     imagepath: chats[index].image,
                     circleAvatar:

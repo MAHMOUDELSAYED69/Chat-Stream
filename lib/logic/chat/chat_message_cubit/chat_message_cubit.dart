@@ -23,14 +23,12 @@ class ChatMessageCubit extends Cubit<ChatMessageState> {
   }) async {
     emit(ChatMessageLoading());
     try {
-      await messageRef.doc(user).set({
-        MessageModel(
-                senderEmail: senderEmail,
-                senderId: senderId,
-                receiverId: receiverId,
-                message: message,
-                timeTamp: timeTamp.toString())
-            .toJson()
+      await messageRef.add({
+        'senderEmail': senderEmail,
+        'senderId': senderId,
+        'receiverId': receiverId,
+        'message': message,
+        'timeTamp': timeTamp.toString()
       });
       emit(ChatSenderMessageSuccess());
     } on FirebaseException catch (err) {
