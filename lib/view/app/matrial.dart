@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hambolah_chat_app/logic/chat/chat_message_cubit/chat_message_cubit.dart';
 import '../../logic/auth/forget_password_cubit/forget_password_cubit.dart';
 import '../../logic/auth/login_cubit/login_cubit.dart';
 import '../../logic/auth/register_cubit/register_cubit.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => AddFriendCubit(),
+        ),
+        BlocProvider(
+          create: (context) => ChatMessageCubit(),
         ),
       ],
       child: MaterialApp(
