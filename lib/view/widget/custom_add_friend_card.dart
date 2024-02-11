@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hambolah_chat_app/view/widget/custom_button.dart';
-
 import '../../core/constant/color.dart';
 
 class AddFriendCard extends StatefulWidget {

@@ -26,13 +26,30 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.darkGrey,
-      floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.pushNamed(context, "/addFriend"),
-          backgroundColor: MyColors.purple,
-          child: const Icon(
-            Icons.add,
-            size: 30,
-          )),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 1,
+              onPressed: () => Navigator.pushNamed(context, "/addFriend"),
+              backgroundColor: MyColors.purple,
+              child: const Icon(
+                Icons.add,
+                size: 30,
+              )),
+              
+             const SizedBox(height: 10),
+
+          FloatingActionButton(
+            heroTag: 2,
+              onPressed: () => Navigator.pushNamed(context, "/request"),
+              backgroundColor: MyColors.purple,
+              child: const Icon(
+                Icons.people_alt_outlined,
+                size: 30,
+              )),
+        ],
+      ),
       appBar: AppBar(
         elevation: BorderSide.strokeAlignOutside,
         backgroundColor: MyColors.purple,
@@ -77,7 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           arguments: chats[index].email);
                     },
                     imagepath: chats[index].image,
-                    circleAvatar: chats[index].name![0].toUpperCase(),
+                    circleAvatar:
+                        chats[index].name![0].toUpperCase(),
                     name: chats[index].name!,
                     lastMessage: chats[index].uid,
                     time: "7.56 AM");
