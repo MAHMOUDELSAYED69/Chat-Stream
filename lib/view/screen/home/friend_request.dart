@@ -6,7 +6,6 @@ import '../../../core/constant/color.dart';
 
 class FirendRequestScreen extends StatelessWidget {
   const FirendRequestScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

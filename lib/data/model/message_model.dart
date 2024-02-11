@@ -11,7 +11,15 @@ class MessageModel {
       required this.receiverId,
       required this.message,
       required this.timeTamp});
-      
+
+  factory MessageModel.fromJson(dynamic jsonData) {
+    return MessageModel(
+        senderEmail: jsonData['senderEmail'],
+        senderId: jsonData['senderId'],
+        receiverId: jsonData['receiverId'],
+        message: jsonData['message'],
+        timeTamp: jsonData['timeTamp']);
+  }
   Map<String, dynamic> toJson() {
     return {
       'senderEmail': senderEmail,
