@@ -30,18 +30,16 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            heroTag: 1,
+              heroTag: 1,
               onPressed: () => Navigator.pushNamed(context, "/addFriend"),
               backgroundColor: MyColors.purple,
               child: const Icon(
                 Icons.add,
                 size: 30,
               )),
-              
-             const SizedBox(height: 10),
-
+          const SizedBox(height: 10),
           FloatingActionButton(
-            heroTag: 2,
+              heroTag: 2,
               onPressed: () => Navigator.pushNamed(context, "/request"),
               backgroundColor: MyColors.purple,
               child: const Icon(
@@ -87,15 +85,13 @@ class _HomeScreenState extends State<HomeScreen> {
             return ListView.builder(
               itemCount: chats.length,
               itemBuilder: (context, index) {
-                log(chats[index].email);
                 return ChatCard(
                     onTap: () {
                       Navigator.pushNamed(context, "/chat",
-                          arguments: chats[index].uid);
+                          arguments: chats[index].email);
                     },
                     imagepath: chats[index].image,
-                    circleAvatar:
-                        chats[index].name![0].toUpperCase(),
+                    circleAvatar: chats[index].name![0].toUpperCase(),
                     name: chats[index].name!,
                     lastMessage: chats[index].uid,
                     time: "7.56 AM");

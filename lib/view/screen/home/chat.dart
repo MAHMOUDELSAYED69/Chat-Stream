@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/data/model/message_model.dart';
@@ -9,7 +6,6 @@ import 'package:hambolah_chat_app/logic/chat/chat_message_cubit/chat_message_cub
 import 'package:hambolah_chat_app/view/widget/custom_chat_bubble.dart';
 
 import '../../../core/constant/color.dart';
-import '../../../core/helper/responsive.dart';
 import '../../widget/custom_chat_text_field.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -23,18 +19,16 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController textEditingController = TextEditingController();
   bool isMessageLoading = false;
   String? errorMessage;
-  String senderId = FirebaseAuth.instance.currentUser!.uid;
-  String senderEmail = FirebaseAuth.instance.currentUser!.email!;
   void chat(
     String parameter,
   ) {
-    context.read<ChatMessageCubit>().sedMessage(
-        senderEmail: senderEmail,
-        senderId: senderId,
+    if (textEditingController.text.isNotEmpty) {
+      BlocProvider.of<ChatMessageCubit>(context).sedMessage(
         receiverId: parameter,
         message: textEditingController.text,
-        timeTamp: DateTime.timestamp());
-    textEditingController.clear();
+      );
+      textEditingController.clear();
+    }
   }
 
   List<MessageModel> messageModel = [];
@@ -42,9 +36,8 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     final String parameter =
         ModalRoute.of(context)!.settings.arguments as String;
-    context
-        .read<ChatMessageCubit>()
-        .recivedMessage(senderId: senderId, receiverId: parameter);
+    BlocProvider.of<ChatMessageCubit>(context)
+        .recivedMessage(receiverId: parameter);
     return Scaffold(
       backgroundColor: MyColors.darkGrey,
       appBar: AppBar(
@@ -83,6 +76,10 @@ class _ChatScreenState extends State<ChatScreen> {
           }
         },
         builder: (context, state) {
+          if (state is ChatReciverMessageSuccess) {
+            isMessageLoading = false;
+            messageModel = state.data;
+          }
           return isMessageLoading
               ? const Center(
                   child: CircularProgressIndicator(),
@@ -93,12 +90,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   physics: const BouncingScrollPhysics(),
                   itemCount: messageModel.length,
                   itemBuilder: (context, index) =>
-                      parameter == messageModel[index].receiverId
-                          ? ChatBubbleForFriend(
+                      messageModel[index].senderId ==
+                              FirebaseAuth.instance.currentUser!.uid
+                          ? ChatBubbleForCurrentUser(
                               message: messageModel[index].message)
-                          : ChatBubbleForCurrentUser(
-                              message: messageModel[index].message),
-                );
+                          : ChatBubbleForFriend(
+                              message: messageModel[index].message));
         },
       ),
     );

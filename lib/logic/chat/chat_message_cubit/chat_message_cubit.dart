@@ -10,26 +10,29 @@ part 'chat_message_state.dart';
 
 class ChatMessageCubit extends Cubit<ChatMessageState> {
   ChatMessageCubit() : super(ChatMessageInitial());
-  CollectionReference messageRef =
-      FirebaseFirestore.instance.collection('message');
-  String user = FirebaseAuth.instance.currentUser!.email!;
+  User user = FirebaseAuth.instance.currentUser!;
 
   Future<void> sedMessage({
-    required String senderEmail,
-    required String senderId,
     required String receiverId,
     required String message,
-    required DateTime timeTamp,
   }) async {
     emit(ChatMessageLoading());
     try {
-      await messageRef.add({
-        'senderEmail': senderEmail,
-        'senderId': senderId,
-        'receiverId': receiverId,
-        'message': message,
-        'timeTamp': timeTamp.toString()
-      });
+      MessageModel messageModel = MessageModel(
+          senderEmail: user.email!,
+          senderId: user.uid,
+          receiverId: receiverId,
+          message: message,
+          timeTamp: DateTime.now().toString());
+      List<String> ids = [user.uid, receiverId];
+      ids.sort();
+      String chatRoomId = ids.join("_");
+      await FirebaseFirestore.instance
+          .collection('chat_room')
+          .doc(chatRoomId)
+          .collection('messages')
+          .add(messageModel.toJson());
+
       emit(ChatSenderMessageSuccess());
     } on FirebaseException catch (err) {
       emit(ChatMessageFailure(message: err.toString()));
@@ -37,13 +40,18 @@ class ChatMessageCubit extends Cubit<ChatMessageState> {
     }
   }
 
-  void recivedMessage({required String senderId, required String receiverId}) {
+  void recivedMessage({required String receiverId}) {
+    emit(ChatMessageLoading());
     try {
-      emit(ChatMessageLoading());
-      messageRef
-          .where('senderId', isEqualTo: senderId)
-          .where('receiverId', isEqualTo: receiverId)
-          .orderBy('timeTamp', descending: true)
+      List<String> ids = [user.uid, receiverId];
+      ids.sort();
+      String chatRoomId = ids.join("_");
+      List<MessageModel> messageModel = [];
+      FirebaseFirestore.instance
+          .collection('chat_room')
+          .doc(chatRoomId)
+          .collection('messages')
+          .orderBy('timeTamp', descending: false)
           .snapshots()
           .listen((event) {
         List<MessageModel> messageModel = [];
@@ -52,6 +60,8 @@ class ChatMessageCubit extends Cubit<ChatMessageState> {
         }
         emit(ChatReciverMessageSuccess(data: messageModel));
       });
+
+      emit(ChatReciverMessageSuccess(data: messageModel));
     } on FirebaseException catch (err) {
       emit(ChatMessageFailure(message: err.toString()));
       log(err.toString());

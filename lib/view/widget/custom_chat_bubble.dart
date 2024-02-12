@@ -22,7 +22,7 @@ class ChatBubbleForCurrentUser extends StatelessWidget {
             topRight: Radius.circular(25),
             bottomRight: Radius.circular(25),
           ),
-          color: MyColors.purple,
+          color: MyColors.darkGrey2,
         ),
         child: Text(
           message,
@@ -59,7 +59,7 @@ class ChatBubbleForFriend extends StatelessWidget {
             topLeft: Radius.circular(25),
             bottomRight: Radius.circular(25),
           ),
-          color: MyColors.darkGrey,
+          color: MyColors.purple,
         ),
         child: Text(
           message,
