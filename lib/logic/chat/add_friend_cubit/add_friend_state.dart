@@ -13,12 +13,6 @@ class AddFriendSuccess extends AddFriendState {
   AddFriendSuccess({required this.data});
 }
 
-class ChatCardSuccess extends AddFriendState {
-  final List<ChatCardModel> data;
-
-  ChatCardSuccess({required this.data});
-}
-
 class AddFriendFailure extends AddFriendState {
   final String message;
 

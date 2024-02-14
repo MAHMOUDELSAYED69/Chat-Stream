@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hambolah_chat_app/data/model/add_friend_model.dart';
-import 'package:hambolah_chat_app/logic/chat/add_friend_cubit/add_friend_cubit.dart';
+import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
 import 'package:hambolah_chat_app/logic/chat/chat_message_cubit/chat_message_cubit.dart';
-
 import '../../../core/constant/color.dart';
+import '../../../logic/chat/chat_card_cubit/chat_card_cubit.dart';
 import '../../widget/custom_chat_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,11 +14,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<AddFriendModel> chats = [];
+  List<ChatCardModel> chats = [];
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<AddFriendCubit>(context).buildChatCard();
+    BlocProvider.of<ChatCardCubit>(context).buildChatCard();
   }
 
   @override
@@ -74,11 +73,11 @@ class _HomeScreenState extends State<HomeScreen> {
               )),
         ],
       ),
-      body: BlocBuilder<AddFriendCubit, AddFriendState>(
+      body: BlocBuilder<ChatCardCubit, ChatCardState>(
         builder: (context, state) {
-          if (state is AddFriendLoading) {
+          if (state is ChatCardLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is AddFriendSuccess) {
+          } else if (state is ChatCardSuccess) {
             chats = state.data;
             return ListView.builder(
               itemCount: chats.length,
@@ -102,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             );
           }
-          if (state is AddFriendFailure) {
+          if (state is ChatCardFailure) {
             return Text('Error: ${state.message}');
           } else {
             return Container();
