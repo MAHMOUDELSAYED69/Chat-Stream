@@ -8,9 +8,15 @@ class AddFriendInitial extends AddFriendState {}
 class AddFriendLoading extends AddFriendState {}
 
 class AddFriendSuccess extends AddFriendState {
-  final List<ChatCardModel> data;
+  final List<AddFriendModel> data;
 
   AddFriendSuccess({required this.data});
+}
+
+class ChatCardSuccess extends AddFriendState {
+  final List<ChatCardModel> data;
+
+  ChatCardSuccess({required this.data});
 }
 
 class AddFriendFailure extends AddFriendState {

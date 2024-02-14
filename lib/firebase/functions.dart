@@ -21,9 +21,10 @@ class FirebaseService {
         .doc(userCredential.user!.uid)
         .set({
       'uid': userCredential.user!.uid,
-      'email': userCredential.user!.uid,
+      'email': userCredential.user!.email,
       'name': userCredential.user!.displayName,
-      'image': userCredential.user?.photoURL
+      'image': userCredential.user?.photoURL,
+      'isFriend': false
     });
   }
 
@@ -43,7 +44,8 @@ class FirebaseService {
       'uid': userCredential.user!.uid,
       'email': userCredential.user!.email,
       'name': userCredential.user!.displayName,
-      'image': userCredential.user?.photoURL
+      'image': userCredential.user?.photoURL,
+      'isFriend': false
     }, SetOptions(merge: true));
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
+import 'package:hambolah_chat_app/data/model/add_friend_model.dart';
 import 'package:hambolah_chat_app/logic/chat/add_friend_cubit/add_friend_cubit.dart';
 import 'package:hambolah_chat_app/view/widget/custom_add_friend_card.dart';
 
@@ -14,7 +14,7 @@ class AddFriendScreen extends StatefulWidget {
 }
 
 class _AddFriendScreenState extends State<AddFriendScreen> {
-  List<ChatCardModel> chats = [];
+  List<AddFriendModel> chats = [];
   @override
   void initState() {
     super.initState();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
+import 'package:hambolah_chat_app/data/model/add_friend_model.dart';
 import 'package:hambolah_chat_app/logic/chat/add_friend_cubit/add_friend_cubit.dart';
 import 'package:hambolah_chat_app/logic/chat/chat_message_cubit/chat_message_cubit.dart';
 
@@ -15,11 +15,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<ChatCardModel> chats = [];
+  List<AddFriendModel> chats = [];
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<AddFriendCubit>(context).buildAddFriendCard();
+    BlocProvider.of<AddFriendCubit>(context).buildChatCard();
   }
 
   @override
@@ -85,8 +85,11 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 return ChatCard(
                     onTap: () {
-                      Navigator.pushNamed(context, "/chat",
-                          arguments: [chats[index].uid, chats[index].email,chats[index].name ?? ""]);
+                      Navigator.pushNamed(context, "/chat", arguments: [
+                        chats[index].uid,
+                        chats[index].email,
+                        chats[index].name ?? ""
+                      ]);
 
                       BlocProvider.of<ChatMessageCubit>(context)
                           .recivedMessage(receiverId: chats[index].uid);
@@ -94,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     imagepath: chats[index].image,
                     circleAvatar: chats[index].name![0].toUpperCase(),
                     name: chats[index].name!,
-                    lastMessage: chats[index].uid,
+                    lastMessage: chats[index].email,
                     time: "7.56 AM");
               },
             );
