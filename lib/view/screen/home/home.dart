@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
 import 'package:hambolah_chat_app/logic/chat/add_friend_cubit/add_friend_cubit.dart';
+import 'package:hambolah_chat_app/logic/chat/chat_message_cubit/chat_message_cubit.dart';
 
 import '../../../core/constant/color.dart';
 import '../../widget/custom_chat_card.dart';
@@ -67,9 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: MyColors.black,
               )),
           IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/setting");
-              },
+              onPressed: () => Navigator.pushNamed(context, "/setting"),
               icon: const Icon(
                 Icons.settings,
                 color: MyColors.black,
@@ -88,7 +86,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 return ChatCard(
                     onTap: () {
                       Navigator.pushNamed(context, "/chat",
-                          arguments: chats[index].email);
+                          arguments: [chats[index].uid, chats[index].email,chats[index].name ?? ""]);
+
+                      BlocProvider.of<ChatMessageCubit>(context)
+                          .recivedMessage(receiverId: chats[index].uid);
                     },
                     imagepath: chats[index].image,
                     circleAvatar: chats[index].name![0].toUpperCase(),

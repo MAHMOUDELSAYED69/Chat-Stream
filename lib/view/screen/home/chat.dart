@@ -10,7 +10,6 @@ import '../../widget/custom_chat_text_field.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
-
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
@@ -34,10 +33,10 @@ class _ChatScreenState extends State<ChatScreen> {
   List<MessageModel> messageModel = [];
   @override
   Widget build(BuildContext context) {
-    final String parameter =
-        ModalRoute.of(context)!.settings.arguments as String;
+    final List<String> parameter =
+        ModalRoute.of(context)!.settings.arguments as List<String>;
     BlocProvider.of<ChatMessageCubit>(context)
-        .recivedMessage(receiverId: parameter);
+        .recivedMessage(receiverId: parameter[0]);
     return Scaffold(
       backgroundColor: MyColors.darkGrey,
       appBar: AppBar(
@@ -49,14 +48,14 @@ class _ChatScreenState extends State<ChatScreen> {
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(25),
                 bottomRight: Radius.circular(25))),
-        title: const Text("Chat",
-            style:
-                TextStyle(fontWeight: FontWeight.w500, color: MyColors.black)),
+        title: Text(parameter[2],
+            style: const TextStyle(
+                fontWeight: FontWeight.w500, color: MyColors.black)),
       ),
       bottomNavigationBar: CustomChatTextField(
         controller: textEditingController,
-        onPressed: () => chat(parameter),
-        onSubmitted: (_) => chat(parameter),
+        onPressed: () => chat(parameter[0]),
+        onSubmitted: (_) => chat(parameter[0]),
       ),
       body: BlocConsumer<ChatMessageCubit, ChatMessageState>(
         listener: (context, state) {
@@ -90,7 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   physics: const BouncingScrollPhysics(),
                   itemCount: messageModel.length,
                   itemBuilder: (context, index) =>
-                      messageModel[index].senderId ==
+                      messageModel[index].senderId !=
                               FirebaseAuth.instance.currentUser!.uid
                           ? ChatBubbleForCurrentUser(
                               message: messageModel[index].message)
