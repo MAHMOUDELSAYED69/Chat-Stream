@@ -21,7 +21,6 @@ class AddFriendCard extends StatefulWidget {
 }
 
 class _AddFriendCardState extends State<AddFriendCard> {
-  bool isTap = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,32 +57,27 @@ class _AddFriendCardState extends State<AddFriendCard> {
           ),
           const SizedBox(height: 10),
           CustomButton(
-            color: isTap ? MyColors.lightGrey : MyColors.purple,
-            height: 40,
-            widget: isTap
-                ? const Text(
-                    "Send",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  )
-                : const Text(
-                    "Add Friend",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-            fontSize: 18,
-            onPressed: () {
-              isTap = !isTap;
-              setState(() {});
-              widget.onTap;
-            },
-          )
+              color: MyColors.purple,
+              height: 40,
+              widget: const Text(
+                "Send",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+              // : const Text(
+              //     "Add Friend",
+              //     style: TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 18,
+              //       fontWeight: FontWeight.w600,
+              //     ),
+              //   )
+              ,
+              fontSize: 18,
+              onPressed: widget.onTap)
         ],
       ),
     );

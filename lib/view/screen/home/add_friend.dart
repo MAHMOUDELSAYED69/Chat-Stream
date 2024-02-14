@@ -5,6 +5,7 @@ import 'package:hambolah_chat_app/logic/chat/add_friend_cubit/add_friend_cubit.d
 import 'package:hambolah_chat_app/view/widget/custom_add_friend_card.dart';
 
 import '../../../core/constant/color.dart';
+import '../../../firebase/functions.dart';
 
 class AddFriendScreen extends StatefulWidget {
   const AddFriendScreen({super.key});
@@ -58,6 +59,10 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                 itemCount: chats.length,
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) => AddFriendCard(
+                  onTap: () {
+                    BlocProvider.of<AddFriendCubit>(context)
+                        .addFriend(chats[index].uid);
+                  },
                   circleAvatar: chats[index].name![0].toUpperCase(),
                   name: chats[index].name!,
                   imagePath: chats[index].image,

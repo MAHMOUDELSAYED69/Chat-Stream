@@ -134,5 +134,11 @@ class FirebaseService {
     log(FirebaseAuth.instance.currentUser!.displayName.toString());
   }
 
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static Future<void> friendRequest(dynamic user) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user)
+        .update({'isFriend': true});
+    log('done');
+  }
 }
