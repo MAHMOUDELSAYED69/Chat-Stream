@@ -1,9 +1,10 @@
+import 'package:chat_stream/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hambolah_chat_app/data/model/chat_card_model.dart';
-import 'package:hambolah_chat_app/logic/chat/chat_message_cubit/chat_message_cubit.dart';
-import '../../../core/constant/color.dart';
+import 'package:chat_stream/model/chat_card_model.dart';
+import 'package:chat_stream/logic/chat/chat_message_cubit/chat_message_cubit.dart';
 import '../../../logic/chat/chat_card_cubit/chat_card_cubit.dart';
+import '../../../logic/setting/change_name_cubit/change_name_cubit.dart';
 import '../../widget/custom_chat_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,63 +15,36 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<ChatCardModel> chats = [];
+  List<ChatCardModel> _chatsList = [];
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ChatCardCubit>(context).buildChatCard();
+    context.read<ChatCardCubit>().buildChatCard();
+    context.read<ChangeNameCubit>().getUserName();
+  }
+
+  void _goToChat(int index) {
+    Navigator.pushNamed(context, RouteManager.chat, arguments: [
+      _chatsList[index].uid,
+      _chatsList[index].email,
+      _chatsList[index].name ?? ""
+    ]);
+
+    context
+        .read<ChatMessageCubit>()
+        .recivedMessage(receiverId: _chatsList[index].uid);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.darkGrey,
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-              heroTag: 1,
-              onPressed: () => Navigator.pushNamed(context, "/addFriend"),
-              backgroundColor: MyColors.purple,
-              child: const Icon(
-                Icons.add,
-                size: 30,
-              )),
-          const SizedBox(height: 10),
-          FloatingActionButton(
-              heroTag: 2,
-              onPressed: () => Navigator.pushNamed(context, "/request"),
-              backgroundColor: MyColors.purple,
-              child: const Icon(
-                Icons.people_alt_outlined,
-                size: 30,
-              )),
-        ],
-      ),
       appBar: AppBar(
-        elevation: BorderSide.strokeAlignOutside,
-        backgroundColor: MyColors.purple,
-        shadowColor: MyColors.darkGrey,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25))),
-        title: const Text("Hambola",
-            style:
-                TextStyle(fontWeight: FontWeight.w500, color: MyColors.black)),
+        title: const Text("Chat Stream"),
         actions: [
           IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                color: MyColors.black,
-              )),
-          IconButton(
-              onPressed: () => Navigator.pushNamed(context, "/setting"),
-              icon: const Icon(
-                Icons.settings,
-                color: MyColors.black,
-              )),
+              onPressed: () =>
+                  Navigator.pushNamed(context, RouteManager.settings),
+              icon: const Icon(Icons.settings)),
         ],
       ),
       body: BlocBuilder<ChatCardCubit, ChatCardState>(
@@ -78,26 +52,16 @@ class _HomeScreenState extends State<HomeScreen> {
           if (state is ChatCardLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ChatCardSuccess) {
-            chats = state.data;
+            _chatsList = state.data;
             return ListView.builder(
-              itemCount: chats.length,
+              physics: const BouncingScrollPhysics(),
+              itemCount: _chatsList.length,
               itemBuilder: (context, index) {
                 return ChatCard(
-                    onTap: () {
-                      Navigator.pushNamed(context, "/chat", arguments: [
-                        chats[index].uid,
-                        chats[index].email,
-                        chats[index].name ?? ""
-                      ]);
-
-                      BlocProvider.of<ChatMessageCubit>(context)
-                          .recivedMessage(receiverId: chats[index].uid);
-                    },
-                    imagepath: chats[index].image,
-                    circleAvatar: chats[index].name![0].toUpperCase(),
-                    name: chats[index].name!,
-                    lastMessage: chats[index].email,
-                    time: "7.56 AM");
+                    onTap: () => _goToChat(index),
+                    name: _chatsList[index].name!,
+                    lastMessage: _chatsList[index].email,
+                    time: "");
               },
             );
           }
