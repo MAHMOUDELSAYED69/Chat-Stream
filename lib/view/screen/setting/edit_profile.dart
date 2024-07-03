@@ -1,120 +1,58 @@
 import 'dart:developer';
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chat_stream/helper/extentions/extentions.dart';
+import 'package:chat_stream/view/widget/my_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hambolah_chat_app/core/constant/color.dart';
-import 'package:hambolah_chat_app/core/helper/responsive.dart';
-import '../../../core/helper/snackbar.dart';
+import 'package:chat_stream/helper/constant/color.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../helper/snackbar.dart';
 import '../../../logic/setting/change_name_cubit/change_name_cubit.dart';
-import '../../../logic/setting/upload_image_cubit/image_cubit.dart';
-import '../../widget/custom_button.dart';
 import '../../widget/custom_text_field.dart';
 
-class EditAccount extends StatefulWidget {
-  const EditAccount({super.key});
+class EditUserName extends StatefulWidget {
+  const EditUserName({super.key});
 
   @override
-  State<EditAccount> createState() => _EditAccountState();
+  State<EditUserName> createState() => _EditUserNameState();
 }
 
-class _EditAccountState extends State<EditAccount> {
-  TextEditingController changeNameController = TextEditingController();
-  String? imageUrl;
-  bool isImageLoading = false;
-  bool isNameLoading = false;
+class _EditUserNameState extends State<EditUserName> {
+  late TextEditingController _changeNameController;
+  @override
+  void initState() {
+     _changeNameController = TextEditingController();
+    super.initState();
+  }
+
+  bool _isNameLoading = false;
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 19),
-          width: 145,
-          height: 5,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(74),
-              color: MyColors.lightGrey),
-        ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 50),
+          padding: const EdgeInsets.only(bottom: 20),
           child: Container(
             padding: EdgeInsets.only(
-                left: 16,
-                right: 16,
-                bottom: MediaQuery.viewInsetsOf(context).bottom,
-                top: 20),
+              left: 16,
+              right: 16,
+              bottom: MediaQuery.viewInsetsOf(context).bottom,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                BlocConsumer<ImageCubit, ImageState>(
-                  listener: (context, state) {
-                    if (state is Imageloading) {
-                      isImageLoading = true;
-                    }
-                    if (state is ImageSuccess) {
-                      isImageLoading = false;
-                      imageUrl = state.imageUrl;
-                    }
-                    if (state is ImageFailure) {
-                      isImageLoading = false;
-                      customSnackBar(context,
-                          "There was an error please try again later!");
-                      log(state.message);
-                    }
-                  },
-                  builder: (context, state) {
-                    return InkWell(
-                      onTap: () {
-                        BlocProvider.of<ImageCubit>(context)
-                            .pickImageFromGallery();
-                      },
-                      child: isImageLoading == true
-                          ? const CircleAvatar(
-                              radius: 65,
-                              child: CircularProgressIndicator(),
-                            )
-                          : CircleAvatar(
-                              radius: 65,
-                              backgroundColor: MyColors.darkGrey2,
-                              backgroundImage: imageUrl != null
-                                  ? FileImage(File(imageUrl!))
-                                  : FirebaseAuth
-                                              .instance.currentUser!.photoURL !=
-                                          null
-                                      ? FileImage(File(FirebaseAuth
-                                          .instance.currentUser!.photoURL!))
-                                      : null,
-                              child: imageUrl == null &&
-                                      FirebaseAuth
-                                              .instance.currentUser!.photoURL ==
-                                          null
-                                  ? Text(
-                                      FirebaseAuth
-                                          .instance.currentUser!.displayName
-                                          .toString()
-                                          .toUpperCase()[0],
-                                      style: const TextStyle(
-                                          color: MyColors.white, fontSize: 24),
-                                    )
-                                  : null, // Replace with your default avatar image
-                            ),
-                    );
-                  },
-                ),
                 BlocConsumer<ChangeNameCubit, ChangeNameState>(
                   listener: (context, state) {
                     if (state is ChangeNameLoading) {
-                      isNameLoading = true;
+                      _isNameLoading = true;
                     }
                     if (state is ChangeNameSuccess) {
-                      isNameLoading = false;
+                      _isNameLoading = false;
                       Navigator.pop(context);
                       FocusScope.of(context).unfocus();
                     }
                     if (state is ChangeNameFailure) {
-                      isNameLoading = false;
+                      _isNameLoading = false;
                       customSnackBar(context,
                           "There was an error please try again later!");
                       log(state.message);
@@ -124,41 +62,46 @@ class _EditAccountState extends State<EditAccount> {
                     return Column(
                       children: [
                         CustomTextFormField(
-                          controller: changeNameController,
+                          controller: _changeNameController,
                           validator: (value) {
                             return null;
                           },
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.name,
                           title: "Change Name",
-                          titleTextStyle: const TextStyle(
-                              color: MyColors.lightGrey,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600),
                         ),
-                        SizedBox(height: 0.0288208 * ScreenSize.height),
+                        SizedBox(height: 20.h),
                         Row(
                           children: [
                             Expanded(
-                              child: CustomButton(
-                                color: MyColors.red,
-                                title: "Cancle",
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
+                              child: ElevatedButton(
+                                style: const ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(
+                                        ColorManager.red)),
+                                child: Text(
+                                  "Cancle",
+                                  style: context.textTheme.bodyMedium
+                                      ?.copyWith(color: ColorManager.white),
+                                ),
+                                onPressed: () => Navigator.pop(context),
                               ),
                             ),
-                            const SizedBox(width: 15),
+                            const SizedBox(width: 16),
                             Expanded(
-                              child: CustomButton(
-                                title: isNameLoading == false ? "Save" : null,
-                                widget: isNameLoading == true
-                                    ? const CircularProgressIndicator()
-                                    : null,
+                              child: ElevatedButton(
+                                child: _isNameLoading == false
+                                    ? Text(
+                                        "Save",
+                                        style: context.textTheme.bodyMedium
+                                            ?.copyWith(
+                                                color: ColorManager.white),
+                                      )
+                                    : const MyLoadingIndicator(),
                                 onPressed: () {
-                                  if (changeNameController.text.isNotEmpty) {
-                                    BlocProvider.of<ChangeNameCubit>(context)
+                                  if (_changeNameController.text.isNotEmpty) {
+                                    context
+                                        .read<ChangeNameCubit>()
                                         .changeDisplayName(
-                                            name: changeNameController.text);
+                                            name: _changeNameController.text);
                                   } else {
                                     Navigator.pop(context);
                                   }
@@ -182,14 +125,15 @@ class _EditAccountState extends State<EditAccount> {
 
 void showEditAccountBottomSheet(BuildContext context) {
   showModalBottomSheet(
+    showDragHandle: true,
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-            topRight: Radius.circular(35), topLeft: Radius.circular(35))),
-    backgroundColor: MyColors.darkGrey,
+            topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+    backgroundColor: ColorManager.darkGrey,
     context: context,
     isScrollControlled: true,
     builder: (BuildContext context) {
-      return const EditAccount();
+      return const EditUserName();
     },
   );
 }
