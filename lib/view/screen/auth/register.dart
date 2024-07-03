@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hambolah_chat_app/core/cache/cache_functions.dart';
-import 'package:hambolah_chat_app/core/constant/color.dart';
-import 'package:hambolah_chat_app/core/helper/snackbar.dart';
-import 'package:hambolah_chat_app/view/widget/custom_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:chat_stream/helper/constant/color.dart';
+import 'package:chat_stream/helper/extentions/extentions.dart';
+import 'package:chat_stream/helper/snackbar.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../../../core/helper/responsive.dart';
 import '../../../logic/auth/register_cubit/register_cubit.dart';
 import '../../widget/custom_text_field.dart';
 import '../../widget/terms_and_privacy.dart';
@@ -18,17 +17,25 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController txtController = TextEditingController();
-  String? email;
-  String? displayName;
-  String? password;
-  bool isLoading = false;
-  register() {
-    if (formKey.currentState?.validate() ?? false) {
-      formKey.currentState!.save();
-      BlocProvider.of<RegisterCubit>(context)
-          .userRegister(email: email!, password: password!);
+  late GlobalKey<FormState> _formKey;
+  late TextEditingController _txtController;
+  @override
+  void initState() {
+    _formKey = GlobalKey<FormState>();
+    _txtController = TextEditingController();
+    super.initState();
+  }
+
+  String? _email;
+  String? _displayName;
+  String? _password;
+  bool _isLoading = false;
+
+  _register() {
+    if (_formKey.currentState?.validate() ?? false) {
+      _formKey.currentState!.save();
+      context.read<RegisterCubit>().userRegister(
+          email: _email!, password: _password!, userName: _displayName!);
     }
   }
 
@@ -37,76 +44,69 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if (state is RegisterLoading) {
-          isLoading = true;
+          _isLoading = true;
         }
         if (state is RegisterSuccess) {
           FocusScope.of(context).unfocus();
-          isLoading = false;
+          _isLoading = false;
           customSnackBar(context, "verify your Email and log in");
           Navigator.pop(context);
         }
         if (state is RegisterFailure) {
-          isLoading = false;
+          _isLoading = false;
           customSnackBar(context, state.message);
         }
       },
       builder: (context, state) {
         return ModalProgressHUD(
-          inAsyncCall: isLoading,
+          inAsyncCall: _isLoading,
           child: Scaffold(
-            backgroundColor: MyColors.darkGrey,
             body: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 0.04861 * ScreenSize.width), //20
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 alignment: Alignment.center,
                 width: double.infinity,
                 child: SingleChildScrollView(
                   child: Form(
-                    key: formKey,
+                    key: _formKey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 0.0345849 * ScreenSize.height), //30
+                        SizedBox(height: 30.h),
                         const Icon(
-                          Icons.chat,
-                          size: 90,
-                          color: MyColors.white,
+                          Icons.bubble_chart,
+                          size: 120,
+                          color: ColorManager.purple,
                         ),
-                        SizedBox(height: 0.0461133 * ScreenSize.height), //40
-                        const Text("Create an account",
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: MyColors.white)),
-                        SizedBox(height: 0.0115283 * ScreenSize.height), //10
+                        SizedBox(height: 10.h),
+                        Text("Create an account",
+                            style: context.textTheme.bodyLarge),
+                        SizedBox(height: 20.h),
                         CustomTextFormField(
                           keyboardType: TextInputType.emailAddress,
                           title: "EMAIL",
                           onSaved: (data) {
-                            email = data;
+                            _email = data;
                           },
                         ),
-                        SizedBox(height: 0.01729249 * ScreenSize.height), //15
+                        SizedBox(height: 10.h),
                         CustomTextFormField(
                           keyboardType: TextInputType.name,
                           title: "DISPLAY NAME",
                           onSaved: (data) {
-                            displayName = data;
-                            CacheData.setData(
-                                key: "displayName", value: displayName);
+                            _displayName = data;
                           },
                         ),
-                        SizedBox(height: 0.01729249 * ScreenSize.height), //15
+                        SizedBox(height: 10.h),
                         CustomTextFormField(
-                          controller: txtController,
+                          controller: _txtController,
                           obscureText: true,
                           keyboardType: TextInputType.visiblePassword,
                           title: "PASSWORD",
                           onSaved: (data) {
-                            password = data;
+                            _password = data;
                           },
                         ),
-                        SizedBox(height: 0.01729249 * ScreenSize.height), //15
+                        SizedBox(height: 10.h),
                         CustomTextFormField(
                           obscureText: true,
                           keyboardType: TextInputType.visiblePassword,
@@ -115,41 +115,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if (value!.isEmpty) {
                               return "please fill out the field!";
                             }
-                            if (value != txtController.text) {
+                            if (value != _txtController.text) {
                               return "Wrong password";
                             }
                             return null;
                           },
                           onSaved: (data) {
-                            password = data;
+                            _password = data;
                           },
                         ),
-                        SizedBox(height: 0.0461133 * ScreenSize.height), //40
-                        CustomButton(
-                          onPressed: register,
-                          color: MyColors.purple,
-                          title: "Register",
+                        SizedBox(height: 40.h),
+                        ElevatedButton(
+                          onPressed: _register,
+                          child: const Text("Register"),
                         ),
-                        SizedBox(height: 0.0345849 * ScreenSize.height), //30
-                        PrivacyAndTerms(
-                            onPrivacyPress: () {}, onTermsPress: () {}),
-                        SizedBox(height: 0.0345849 * ScreenSize.height), //30
+                        SizedBox(height: 20.h),
+                        const PrivacyAndTerms(),
+                        SizedBox(height: 20.h),
                         Row(
                           children: [
-                            InkWell(
-                              splashColor: MyColors.darkGrey,
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
+                            GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: Text(
                                 "Already have an account?",
-                                style: TextStyle(
-                                    fontSize: 18, color: MyColors.lightBlue),
+                                style: context.textTheme.bodyMedium
+                                    ?.copyWith(color: ColorManager.lightBlue),
                               ),
                             )
                           ],
                         ),
-                        SizedBox(height: 0.0345849 * ScreenSize.height), //30
+                        SizedBox(height: 25.h),
                       ],
                     ),
                   ),

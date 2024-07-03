@@ -1,33 +1,41 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hambolah_chat_app/core/constant/color.dart';
-import 'package:hambolah_chat_app/core/helper/responsive.dart';
-import 'package:hambolah_chat_app/core/helper/snackbar.dart';
-import 'package:hambolah_chat_app/firebase/functions.dart';
-import 'package:hambolah_chat_app/logic/auth/login_cubit/login_cubit.dart';
-import 'package:hambolah_chat_app/view/screen/auth/forget_password.dart';
-import 'package:hambolah_chat_app/view/widget/custom_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:chat_stream/helper/constant/color.dart';
+import 'package:chat_stream/helper/extentions/extentions.dart';
+import 'package:chat_stream/helper/snackbar.dart';
+import 'package:chat_stream/firebase/functions.dart';
+import 'package:chat_stream/logic/auth/login_cubit/login_cubit.dart';
+import 'package:chat_stream/router/app_router.dart';
+import 'package:chat_stream/view/screen/auth/forget_password.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../widget/custom_text_field.dart';
 
-class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<LogInScreen> createState() => _LogInScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LogInScreenState extends State<LogInScreen> {
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  String? email;
-  String? password;
-  bool isLoading = false;
-  login() {
-    if (formKey.currentState!.validate()) {
-      formKey.currentState!.save();
-      BlocProvider.of<LoginCubit>(context)
-          .userLogin(email: email!, password: password!);
+class _LoginScreenState extends State<LoginScreen> {
+  late GlobalKey<FormState> _formKey;
+  @override
+  void initState() {
+    _formKey = GlobalKey<FormState>();
+    super.initState();
+  }
+
+  String? _email;
+  String? _password;
+  bool _isLoading = false;
+  _login() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      context
+          .read<LoginCubit>()
+          .userLogin(email: _email!, password: _password!);
     }
   }
 
@@ -36,10 +44,10 @@ class _LogInScreenState extends State<LogInScreen> {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginLoading) {
-          isLoading = true;
+          _isLoading = true;
         }
         if (state is LoginSuccess) {
-          isLoading = false;
+          _isLoading = false;
           FocusScope.of(context).unfocus();
           if (FirebaseAuth.instance.currentUser!.emailVerified) {
             Navigator.pushNamedAndRemoveUntil(
@@ -50,93 +58,88 @@ class _LogInScreenState extends State<LogInScreen> {
           }
         }
         if (state is LoginFailure) {
-          isLoading = false;
+          _isLoading = false;
           customSnackBar(context, state.message);
         }
       },
       builder: (context, state) {
         return ModalProgressHUD(
-          inAsyncCall: isLoading,
+          inAsyncCall: _isLoading,
           child: Scaffold(
-            backgroundColor: MyColors.darkGrey,
             body: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 0.04861 * ScreenSize.width), //20
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 alignment: Alignment.center,
                 width: double.infinity,
                 child: SingleChildScrollView(
                   child: Form(
-                    key: formKey,
+                    key: _formKey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Icon(
-                          Icons.chat,
-                          size: 90,
-                          color: MyColors.white,
+                          Icons.bubble_chart,
+                          size: 120,
+                          color: ColorManager.purple,
                         ),
-                        SizedBox(height: 0.0461133 * ScreenSize.height), //40
-                        const Text("Welcome back!",
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: MyColors.white)),
-                        SizedBox(height: 0.0115283 * ScreenSize.height), //10
-                        const Text("We're so excited to see you again!",
-                            style: TextStyle(
-                                fontSize: 18, color: MyColors.lightGrey)),
+                        SizedBox(height: 10.h),
+                        Text(
+                          "Welcome back!",
+                          style: context.textTheme.bodyLarge,
+                        ),
+                        SizedBox(height: 5.h),
+                        Text(
+                          "We're so excited to see you again!",
+                          style: context.textTheme.bodyMedium,
+                        ),
+                        SizedBox(height: 40.h),
                         CustomTextFormField(
                           keyboardType: TextInputType.emailAddress,
                           onSaved: (data) {
-                            email = data;
+                            _email = data;
                           },
                           title: "EMAIL",
                         ),
-                        SizedBox(height: 0.01729249 * ScreenSize.height), //15
+                        SizedBox(height: 10.h),
                         CustomTextFormField(
                           isVisible: true,
                           keyboardType: TextInputType.visiblePassword,
                           onSaved: (data) {
-                            password = data;
+                            _password = data;
                           },
                           title: "PASSWORD",
                         ),
-                        SizedBox(height: 0.005764 * ScreenSize.height), //5
+                        SizedBox(height: 5.h),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: InkWell(
-                            splashColor: MyColors.darkGrey,
+                            splashColor: ColorManager.darkGrey,
                             onTap: () => showForgetPasswordBottomSheet(context),
-                            child: const Text(
+                            child: Text(
                               "Forget your password?",
-                              style: TextStyle(
-                                  fontSize: 18, color: MyColors.lightBlue),
+                              style: context.textTheme.bodyMedium
+                                  ?.copyWith(color: ColorManager.lightBlue),
                             ),
                           ),
                         ),
-                        SizedBox(height: 0.0345849 * ScreenSize.height), //30
-                        CustomButton(
-                          onPressed: login,
-                          color: MyColors.purple,
-                          title: "Log In",
+                        SizedBox(height: 60.h),
+                        ElevatedButton(
+                          onPressed: _login,
+                          child: const Text("Log In"),
                         ),
-                        SizedBox(height: 0.0345849 * ScreenSize.height), //30
+                        SizedBox(height: 20.h),
                         Row(
                           children: [
-                            const Text(
+                            Text(
                               "Need an account? ",
-                              style: TextStyle(
-                                  fontSize: 16, color: MyColors.lightGrey),
+                              style: context.textTheme.bodyMedium,
                             ),
-                            InkWell(
-                              splashColor: MyColors.darkGrey,
-                              onTap: () {
-                                Navigator.pushNamed(context, "/register");
-                              },
-                              child: const Text(
+                            GestureDetector(
+                              onTap: () => Navigator.pushNamed(
+                                  context, RouteManager.register),
+                              child: Text(
                                 "Register",
-                                style: TextStyle(
-                                    fontSize: 18, color: MyColors.lightBlue),
+                                style: context.textTheme.bodyMedium
+                                    ?.copyWith(color: ColorManager.lightBlue),
                               ),
                             )
                           ],
