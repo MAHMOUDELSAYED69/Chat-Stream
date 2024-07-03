@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hambolah_chat_app/firebase/functions.dart';
 import 'package:meta/meta.dart';
 part 'login_state.dart';
 
@@ -11,7 +11,20 @@ class LoginCubit extends Cubit<LoginState> {
       {required String email, required String password}) async {
     emit(LoginLoading());
     try {
-      await FirebaseService.logIn(email: email, password: password);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (userCredential.user?.emailVerified == true) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .update({
+          'emailVerify': true,
+        });
+      }
+
       emit(LoginSuccess());
     } on FirebaseAuthException catch (err) {
       emit(LoginFailure(message: err.code));

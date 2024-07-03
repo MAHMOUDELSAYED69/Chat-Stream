@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hambolah_chat_app/firebase/functions.dart';
+import 'package:chat_stream/firebase/functions.dart';
 import 'package:meta/meta.dart';
 
 part 'register_state.dart';
@@ -8,10 +8,13 @@ part 'register_state.dart';
 class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit() : super(RegisterInitial());
   Future<void> userRegister(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required String userName}) async {
     try {
       emit(RegisterLoading());
-      await FirebaseService.register(email: email, password: password);
+      await FirebaseService.register(
+          email: email, password: password, userName: userName);
       emit(RegisterSuccess());
     } on FirebaseAuthException catch (err) {
       emit(RegisterFailure(message: err.code));

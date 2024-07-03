@@ -3,14 +3,14 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hambolah_chat_app/data/model/message_model.dart';
+import 'package:chat_stream/model/message_model.dart';
 import 'package:meta/meta.dart';
 part 'chat_message_state.dart';
 
 class ChatMessageCubit extends Cubit<ChatMessageState> {
   ChatMessageCubit() : super(ChatMessageInitial());
 
-  Future<void> sedMessage({
+  Future<void> sendMessage({
     required String receiverId,
     required String message,
   }) async {
@@ -48,7 +48,10 @@ class ChatMessageCubit extends Cubit<ChatMessageState> {
           .collection('chat_room')
           .doc(chatRoomId)
           .collection('messages')
-          .orderBy('timeTamp', descending: true,)
+          .orderBy(
+            'timeTamp',
+            descending: true,
+          )
           .snapshots()
           .listen((event) {
         List<MessageModel> messageModel = [];

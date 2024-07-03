@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
-import '../../../data/model/chat_card_model.dart';
+import '../../../model/chat_card_model.dart';
 
 part 'chat_card_state.dart';
 
@@ -16,8 +17,10 @@ class ChatCardCubit extends Cubit<ChatCardState> {
       usersCollection.snapshots().listen((event) {
         List<ChatCardModel> chatCardList = [];
         for (var doc in event.docs) {
-          if (doc['isFriend'] == true) {
-            chatCardList.add(ChatCardModel.fromJson(doc));
+          if (doc['uid'] != FirebaseAuth.instance.currentUser?.uid) {
+            if (doc['emailVerify'] ==true) {
+              chatCardList.add(ChatCardModel.fromJson(doc));
+            }
           }
         }
         emit(ChatCardSuccess(data: chatCardList));

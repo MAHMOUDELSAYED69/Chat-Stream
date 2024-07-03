@@ -1,23 +1,22 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
-import '../../../core/cache/cache_functions.dart';
+import '../../../helper/cache/cache_functions.dart';
 import '../../../firebase/functions.dart';
 
-part 'log_out_state.dart';
+enum LogOutState { initial, loading, success, failure }
 
 class LogOutCubit extends Cubit<LogOutState> {
-  LogOutCubit() : super(LogOutInitial());
+  LogOutCubit() : super(LogOutState.initial);
   Future<void> logOut() async {
-    emit(LogOutLoading());
+    emit(LogOutState.loading);
     try {
       await FirebaseService.logOut();
       CacheData.clearData(clearData: true);
-      emit(LogOutSuccess());
-    } on FirebaseAuthException catch (err) {
-      emit(LogOutFailure(message: err.code));
+      emit(LogOutState.success);
     } catch (err) {
-      emit(LogOutFailure(message: err.toString()));
+      log(err.toString());
+      emit(LogOutState.success);
     }
   }
 }
