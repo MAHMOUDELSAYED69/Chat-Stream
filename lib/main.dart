@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'core/cache/cache_functions.dart';
-import 'view/app/matrial.dart';
+import 'helper/cache/cache_functions.dart';
+import 'app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
