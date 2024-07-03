@@ -1,15 +1,13 @@
-import 'dart:developer';
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chat_stream/helper/extentions/extentions.dart';
+import 'package:chat_stream/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hambolah_chat_app/core/constant/color.dart';
-import 'package:hambolah_chat_app/core/helper/snackbar.dart';
-import 'package:hambolah_chat_app/logic/setting/log_out_cubit/log_out_cubit.dart';
-import 'package:hambolah_chat_app/view/screen/setting/edit_profile.dart';
+import 'package:chat_stream/helper/constant/color.dart';
+import 'package:chat_stream/helper/snackbar.dart';
+import 'package:chat_stream/view/screen/setting/edit_profile.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../logic/setting/change_name_cubit/change_name_cubit.dart';
-import '../../../logic/setting/upload_image_cubit/image_cubit.dart';
+import '../../../logic/setting/log_out_cubit/log_out_cubit.dart';
 import '../../widget/setting_button.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -20,190 +18,107 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  bool isImageLoading = false;
+  _logout() {
+    context.read<LogOutCubit>().logOut();
+  }
+
   bool isLogOutLoading = false;
-  String? imageUrl;
-  pickImage() {
-    BlocProvider.of<ImageCubit>(context).pickImageFromGallery();
-  }
-
-  logOut() {
-    BlocProvider.of<LogOutCubit>(context).logOut();
-  }
-
   @override
   Widget build(BuildContext context) {
+    const kDivider = Divider(
+      color: ColorManager.lightGrey,
+      thickness: 2,
+      endIndent: 16,
+      indent: 16,
+    );
     return Scaffold(
-      backgroundColor: MyColors.darkGrey,
       appBar: AppBar(
-        elevation: BorderSide.strokeAlignOutside,
-        backgroundColor: MyColors.purple,
-        shadowColor: MyColors.darkGrey,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25))),
-        title: const Text("Settings",
-            style:
-                TextStyle(fontWeight: FontWeight.w500, color: MyColors.black)),
+        title: const Text("Settings"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(height: 5.h),
             Padding(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  BlocConsumer<ImageCubit, ImageState>(
-                    listener: (context, state) {
-                      if (state is Imageloading) {
-                        isImageLoading = true;
-                      }
-                      if (state is ImageSuccess) {
-                        isImageLoading = false;
-                        imageUrl = state.imageUrl;
-                      }
-                      if (state is ImageFailure) {
-                        isImageLoading = false;
-                        customSnackBar(context,
-                            "There was an error please try again later!");
-                        log(state.message);
-                      }
-                    },
-                    builder: (context, state) {
-                      return InkWell(
-                        onTap: pickImage,
-                        child: isImageLoading == true
-                            ? const CircleAvatar(
-                                radius: 35,
-                                child: CircularProgressIndicator(),
-                              )
-                            : CircleAvatar(
-                                radius: 35,
-                                backgroundColor: MyColors.darkGrey2,
-                                backgroundImage: imageUrl != null
-                                    ? FileImage(File(imageUrl!))
-                                    : FirebaseAuth.instance.currentUser!
-                                                .photoURL !=
-                                            null
-                                        ? FileImage(File(FirebaseAuth
-                                            .instance.currentUser!.photoURL!))
-                                        : null,
-                                child: imageUrl == null &&
-                                        FirebaseAuth.instance.currentUser!
-                                                .photoURL ==
-                                            null
-                                    ? SizedBox(
-                                      child: Text(
-                                          FirebaseAuth
-                                              .instance.currentUser!.displayName
-                                              .toString()
-                                              .toUpperCase()[0],
-                                              overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              color: MyColors.white,
-                                              fontSize: 24),
-                                        ),
-                                    )
-                                    : null, // Replace with your default avatar image
-                              ),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 10),
                   BlocBuilder<ChangeNameCubit, ChangeNameState>(
                     builder: (context, state) {
                       return Text(
+                        context.read<ChangeNameCubit>().userName ?? "",
                         overflow: TextOverflow.clip,
-                        FirebaseAuth.instance.currentUser!.displayName
-                            .toString(),
-                        style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: MyColors.white),
+                        style:
+                            context.textTheme.bodyLarge?.copyWith(fontSize: 22),
                       );
                     },
                   ),
-                  const Spacer(),
                   IconButton(
-                      onPressed: () => showEditAccountBottomSheet(context),
-                      icon: const Icon(
-                        Icons.edit,
-                        color: MyColors.white,
-                      ))
+                    style: const ButtonStyle(
+                        backgroundColor:
+                            WidgetStatePropertyAll(ColorManager.darkGrey2)),
+                    onPressed: () => showEditAccountBottomSheet(context),
+                    icon: const Icon(
+                      Icons.mode_edit_outline_outlined,
+                      color: ColorManager.white,
+                    ),
+                  ),
                 ],
               ),
             ),
-            const Divider(
-                color: MyColors.white, thickness: 2, indent: 20, endIndent: 20),
+            kDivider,
             SettingButton(
                 title: "Account",
+                foColor: ColorManager.white,
                 icon: Icons.key,
-                onTap: () => Navigator.pushNamed(context, "/account")),
-            SettingButton(
+                onTap: () =>
+                    Navigator.pushNamed(context, RouteManager.account)),
+            const SettingButton(
               title: "Privacy",
               icon: Icons.lock_person_outlined,
-              onTap: () {},
             ),
-            SettingButton(
+            const SettingButton(
               title: "Theme",
               icon: Icons.style_outlined,
-              onTap: () {},
             ),
-            SettingButton(
+            const SettingButton(
               title: "App language",
               icon: Icons.language,
-              onTap: () {},
             ),
-            SettingButton(
+            const SettingButton(
               title: "Help",
               icon: Icons.help_outline,
-              onTap: () {},
             ),
-            SettingButton(
+            const SettingButton(
               title: "Invite a friend",
               icon: Icons.people_alt_sharp,
-              onTap: () {},
             ),
-            BlocConsumer<LogOutCubit, LogOutState>(
+            BlocListener<LogOutCubit, LogOutState>(
               listener: (context, state) {
-                if (state is LogOutLoading) {
-                  isLogOutLoading = true;
-                }
-                if (state is LogOutSuccess) {
-                  isLogOutLoading = false;
-                
+                if (state == LogOutState.success) {
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/login", (route) => false);
+                  customSnackBar(context, "Logout Successfully!");
                 }
-                if (state is LogOutFailure) {
-                  isLogOutLoading = false;
+                if (state == LogOutState.failure) {
                   customSnackBar(context, "There was an error");
-                  log(state.message);
                 }
               },
-              builder: (context, state) {
-                return SettingButton(
-                  title: "Log Out",
-                  icon: isLogOutLoading == false ? Icons.logout : null,
-                  widget: isLogOutLoading == true
-                      ? const CircularProgressIndicator()
-                      : null,
-                  onTap: logOut,
-                );
-              },
+              child: SettingButton(
+                foColor: ColorManager.red,
+                title: "Log Out",
+                icon: Icons.logout,
+                onTap: _logout,
+              ),
             ),
-            const Spacer(flex: 2),
-            const Text("from", style: TextStyle(color: MyColors.lightGrey)),
-            const Text(
-              "Hambola",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: MyColors.white),
+            kDivider,
+            SizedBox(height: 50.h),
+            Text("from", style: context.textTheme.bodyMedium),
+            Text(
+              "Chat Stream",
+              style: context.textTheme.bodyLarge?.copyWith(fontSize: 20),
             ),
-            const Spacer(),
           ],
         ),
       ),
