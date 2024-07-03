@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/constant/color.dart';
+import '../../helper/constant/color.dart';
 
 class CustomChatTextField extends StatefulWidget {
   const CustomChatTextField({
@@ -26,7 +26,7 @@ class _CustomChatTextFieldState extends State<CustomChatTextField> {
       child: Padding(
         padding: const EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 5),
         child: TextField(
-          cursorColor: foucsColor ? MyColors.purple : MyColors.lightGrey,
+          cursorColor: foucsColor ? ColorManager.purple : ColorManager.lightGrey,
           controller: widget.controller,
           onTap: () {
             foucsColor = true;
@@ -37,19 +37,19 @@ class _CustomChatTextFieldState extends State<CustomChatTextField> {
           //   foucsColor = false;
           //   setState(() {});
           // },
-          style: const TextStyle(color: MyColors.white),
+          style: const TextStyle(color: ColorManager.white),
           decoration: InputDecoration(
             filled: true,
-            fillColor: MyColors.darkGrey2,
+            fillColor: ColorManager.darkGrey2,
             hintText: '  Write your message',
-            hintStyle: const TextStyle(color: MyColors.lightGrey),
+            hintStyle: const TextStyle(color: ColorManager.lightGrey),
             suffixIcon: IconButton(
               onPressed: widget.onPressed,
               icon: Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: Icon(
                   Icons.send_rounded,
-                  color: foucsColor ? MyColors.purple : MyColors.lightGrey,
+                  color: foucsColor ? ColorManager.purple : ColorManager.lightGrey,
                   size: 30,
                 ),
               ),
@@ -64,7 +64,7 @@ class _CustomChatTextFieldState extends State<CustomChatTextField> {
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 width: 2,
-                color: MyColors.purple,
+                color: ColorManager.purple,
               ),
             ),
           ),

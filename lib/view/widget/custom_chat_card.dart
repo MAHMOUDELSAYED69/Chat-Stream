@@ -1,25 +1,20 @@
-import 'dart:io';
-
+import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/constant/color.dart';
+import '../../helper/constant/color.dart';
 
 class ChatCard extends StatelessWidget {
   const ChatCard({
     super.key,
     this.onTap,
-    required this.circleAvatar,
     required this.name,
     required this.lastMessage,
     required this.time,
-    this.imagepath,
   });
   final void Function()? onTap;
-  final String circleAvatar;
   final String name;
   final String lastMessage;
   final String time;
-  final String? imagepath;
 
   @override
   Widget build(BuildContext context) {
@@ -28,38 +23,31 @@ class ChatCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: const BoxDecoration(
-            color: MyColors.darkGrey2,
-            border: Border.symmetric(
-                horizontal: BorderSide(width: 2, color: MyColors.black))),
+          color: ColorManager.darkGrey2,
+          border: Border.symmetric(
+            horizontal: BorderSide(width: 2, color: ColorManager.black),
+          ),
+        ),
         child: Row(
           children: [
             CircleAvatar(
-              radius: 30,
-              backgroundColor: MyColors.darkGrey,
-              backgroundImage:
-                  imagepath != null ? FileImage(File(imagepath!)) : null,
-              child: imagepath == null
-                  ? Text(
-                      circleAvatar,
-                      style:
-                          const TextStyle(fontSize: 20, color: MyColors.white),
-                    )
-                  : null,
-            ),
+                radius: 30,
+                backgroundColor: ColorManager.darkGrey,
+                child: Text(
+                  name[0].toUpperCase(),
+                  style: context.textTheme.bodyLarge,
+                )),
             const SizedBox(width: 20),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: 250,
+                  width: context.width / 2,
                   child: Text(
                     name,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontSize: 24,
-                        color: MyColors.white,
-                        fontWeight: FontWeight.w500),
+                    style: context.textTheme.bodyLarge?.copyWith(fontSize: 20),
                   ),
                 ),
                 SizedBox(
@@ -67,16 +55,13 @@ class ChatCard extends StatelessWidget {
                   child: Text(
                     lastMessage,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontSize: 16, color: MyColors.lightGrey),
+                    style: context.textTheme.bodyMedium,
                   ),
                 ),
               ],
             ),
             const Spacer(),
-            Text(time,
-                style:
-                    const TextStyle(fontSize: 16, color: MyColors.lightGrey)),
+            Text(time, style: context.textTheme.bodySmall),
           ],
         ),
       ),

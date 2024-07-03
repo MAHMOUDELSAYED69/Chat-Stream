@@ -1,55 +1,48 @@
+import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/constant/color.dart';
+import '../../helper/constant/color.dart';
 
 class PrivacyAndTerms extends StatelessWidget {
-  const PrivacyAndTerms({
-    super.key,
-    this.onTermsPress,
-    this.onPrivacyPress,
-  });
-  final void Function()? onTermsPress;
-  final void Function()? onPrivacyPress;
+  const PrivacyAndTerms({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Wrap(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          "By registering, you agree to Hambola's",
-          style: TextStyle(
-            color: MyColors.lightGrey,
-          ),
+        Text(
+          "By registering, you agree to Chat Stream's ",
+          style: context.textTheme.bodySmall,
         ),
-        InkWell(
-            onTap: onTermsPress,
-            child: const Text(
-              "Terms of Service",
-              style: TextStyle(
-                color: MyColors.lightBlue,
-              ),
-            )),
-        const Text(
-          " and ",
-          style: TextStyle(
-            color: MyColors.lightGrey,
-          ),
-        ),
-        InkWell(
-            onTap: onPrivacyPress,
-            child: const Text(
-              "Privacy Policy",
-              style: TextStyle(
-                color: MyColors.lightBlue,
-              ),
-            )),
-        const Text(
-          ".",
-          style: TextStyle(
-            color: MyColors.lightGrey,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+                onTap: () {},
+                child: Text(
+                  "Terms of Service",
+                  style: context.textTheme.bodySmall
+                      ?.copyWith(color: ColorManager.lightBlue),
+                )),
+            Text(
+              " and ",
+              style: context.textTheme.bodySmall,
+            ),
+            InkWell(
+                onTap: () {},
+                child: Text(
+                  "Privacy Policy",
+                  style: context.textTheme.bodySmall
+                      ?.copyWith(color: ColorManager.lightBlue),
+                )),
+            Text(
+              ".",
+              style: context.textTheme.bodySmall,
+            ),
+          ],
         ),
       ],
     );
   }
 }
-

@@ -1,44 +1,47 @@
+import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:flutter/material.dart';
-import 'package:hambolah_chat_app/core/constant/color.dart';
+import 'package:chat_stream/helper/constant/color.dart';
 
 class SettingButton extends StatelessWidget {
   const SettingButton({
     super.key,
     required this.title,
-     this.icon,
+    this.icon,
     this.onTap,
-    this.widget,
+    this.bgColor,
+    this.foColor,
   });
   final String title;
   final IconData? icon;
   final void Function()? onTap;
-  final Widget? widget;
+  final Color? bgColor;
+  final Color? foColor;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Card(
-        shape: const BeveledRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(2))),
-        color: MyColors.darkGrey2,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(18),
-              child: widget ??
-                  Icon(
-                    icon,
-                    color: MyColors.white,
-                  ),
-            ),
-            Text(
-              title,
-              style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: MyColors.white),
-            )
-          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: InkWell(
+        onTap: onTap ?? () {},
+        child: Card(
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+          shape: const BeveledRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(2))),
+          color: bgColor ?? ColorManager.darkGrey2,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Icon(
+                  icon,
+                  color: foColor ?? ColorManager.lightGrey,
+                ),
+              ),
+              Text(
+                title,
+                style: context.textTheme.bodyMedium?.copyWith(color: foColor),
+              )
+            ],
+          ),
         ),
       ),
     );
