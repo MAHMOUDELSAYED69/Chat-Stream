@@ -2,51 +2,51 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../core/cache/cache_functions.dart';
-
 class FirebaseService {
   //! REGISTER
   static Future<void> register(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required String userName}) async {
     UserCredential userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
-    await FirebaseAuth.instance.currentUser!
-        .updateDisplayName(CacheData.getdata(key: "displayName"));
-    FirebaseService.emailVerify();
-    FirebaseFirestore.instance
+
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(userCredential.user!.uid)
         .set({
       'uid': userCredential.user!.uid,
       'email': userCredential.user!.email,
-      'name': userCredential.user!.displayName,
-      'image': userCredential.user?.photoURL,
-      'isFriend': false
+      'name': userName,
+      'emailVerify': false,
     });
+
+    FirebaseService.emailVerify();
   }
 
 //! LOGIN
   static Future<void> logIn(
       {required String email, required String password}) async {
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(userCredential.user!.uid)
-        .set({
-      'uid': userCredential.user!.uid,
-      'email': userCredential.user!.email,
-      'name': userCredential.user!.displayName,
-      'image': userCredential.user?.photoURL,
-      'isFriend': false
-    }, SetOptions(merge: true));
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (userCredential.user?.emailVerified == true) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .update({
+          'emailVerify': true,
+        });
+      }
+    } catch (err) {
+      log(err.toString());
+    }
   }
 
   //! RESET PASSWORD
@@ -61,7 +61,11 @@ class FirebaseService {
 
   //! EMAIL VERIFY
   static Future<void> emailVerify() async {
-    await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+    try {
+      await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+    } on FirebaseAuthException catch (err) {
+      log(err.message.toString());
+    }
   }
 
   //! DELETE USER
@@ -124,21 +128,19 @@ class FirebaseService {
     }
   }
 
-  static Future<void> updateUserImage({String? urlImage}) async {
-    await FirebaseAuth.instance.currentUser!.updatePhotoURL(urlImage);
-    log(FirebaseAuth.instance.currentUser!.photoURL.toString());
-  }
-
   static Future<void> updateUserDisplayName({String? name}) async {
-    await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({'name': name});
     log(FirebaseAuth.instance.currentUser!.displayName.toString());
   }
 
-  static Future<void> friendRequest(dynamic user) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user)
-        .update({'isFriend': true});
-    log('done');
-  }
+  // static Future<void> friendRequest(dynamic user) async {
+  //   await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(user)
+  //       .update({'isFriend': 1});
+  //   log('done');
+  // }
 }
