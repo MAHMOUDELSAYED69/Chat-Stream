@@ -1,7 +1,11 @@
-import 'dart:developer';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:chat_stream/router/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../core/helper/responsive.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../helper/constant/color.dart';
+import '../../helper/responsive.dart';
+import '../../logic/setting/change_name_cubit/change_name_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,99 +14,75 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  AnimationController? animationController;
-  Animation? animation;
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1000));
-    animation = Tween<double>(begin: .2, end: 1).animate(animationController!)
-      ..addListener(() {
-        setState(() {});
-      });
-    animationController?.repeat(reverse: true);
-    getToNewScreen();
+    _navigateToNextScreen();
+    if (FirebaseAuth.instance.currentUser != null &&
+        FirebaseAuth.instance.currentUser!.emailVerified) {
+      context.read<ChangeNameCubit>().getUserName();
+    }
+  }
+
+  void _navigateToNextScreen() {
+    Future.delayed(const Duration(seconds: 3), () {
+      final routeName = FirebaseAuth.instance.currentUser != null &&
+              FirebaseAuth.instance.currentUser!.emailVerified
+          ? RouteManager.home
+          :  RouteManager.login;
+      Navigator.pushReplacementNamed(context, routeName);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Image.asset("assets/image/splash_bg.png",
-              width: double.infinity, fit: BoxFit.fill),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 30, left: 30, right: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(),
-                  const Text("Welcome to",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                      )),
-                  AnimatedBuilder(
-                      animation: animation!,
-                      builder: (context, _) => Opacity(
-                          opacity: animation?.value,
-                          child: Image.asset(
-                            "assets/image/hambola.png",
-                            width: 160,
-                            height: 110,
-                          ))),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Text("start chatting with your friends",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey)),
-                  ),
-                  const Spacer(),
-                  const Text("V 0.0.01",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black)),
-                ],
-              ),
-            ),
-          )
-        ],
+      backgroundColor: ColorManager.darkGrey,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Spacer(flex: 6),
+            _buildAnimatedText(),
+            const Spacer(flex: 5),
+            _buildSubtitle(),
+            const Spacer(),
+          ],
+        ),
       ),
     );
   }
 
-  void getToNewScreen() {
-    Future.delayed(
-      const Duration(
-        seconds: 3,
-      ),
-      () {
-        log("height: ${ScreenSize.height}");
-        log("width: ${ScreenSize.width}");
-        Navigator.pushReplacementNamed(
-            context,
-            FirebaseAuth.instance.currentUser != null &&
-                    FirebaseAuth.instance.currentUser!.emailVerified
-                ? "/home"
-                : "/login");
-      },
+  Widget _buildAnimatedText() {
+    return AnimatedTextKit(
+      animatedTexts: [
+        TypewriterAnimatedText(
+          'Chat Stream',
+          textStyle: const TextStyle(
+            color: ColorManager.purple,
+            fontSize: 32.0,
+            fontWeight: FontWeight.bold,
+          ),
+          speed: const Duration(milliseconds: 100),
+        ),
+      ],
+      isRepeatingAnimation: false,
+      pause: const Duration(milliseconds: 1000),
+      displayFullTextOnTap: true,
+      stopPauseOnTap: true,
     );
   }
 
-  @override
-  void dispose() {
-    animationController?.dispose();
-    super.dispose();
+  Widget _buildSubtitle() {
+    return const Text(
+      "start chatting with your friends",
+      style: TextStyle(
+        fontSize: 16,
+        color: ColorManager.purple,
+      ),
+    );
   }
 }

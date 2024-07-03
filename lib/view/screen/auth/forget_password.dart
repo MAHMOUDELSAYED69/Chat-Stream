@@ -2,12 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hambolah_chat_app/core/constant/color.dart';
-import 'package:hambolah_chat_app/core/helper/responsive.dart';
-import 'package:hambolah_chat_app/logic/auth/forget_password_cubit/forget_password_cubit.dart';
-import '../../../core/helper/snackbar.dart';
-import '../../widget/custom_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:chat_stream/helper/constant/color.dart';
+import 'package:chat_stream/helper/extentions/extentions.dart';
+import 'package:chat_stream/logic/auth/forget_password_cubit/forget_password_cubit.dart';
+import '../../../helper/snackbar.dart';
 import '../../widget/custom_text_field.dart';
+import '../../widget/my_loading_indicator.dart';
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});
@@ -17,93 +18,82 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  GlobalKey<FormState> formKey = GlobalKey();
-  String? email;
-  bool isLoading = false;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    _formKey = GlobalKey<FormState>();
+    super.initState();
+  }
+
+  void _resetPassword() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      context.read<ForgetPasswordCubit>().resetPassword(email: _email!);
+    }
+  }
+
+  String? _email;
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
       listener: (context, state) {
         if (state is ForgetPasswordLoading) {
-          isLoading = true;
+          _isLoading = true;
         }
         if (state is ForgetPasswordSuccess) {
-          isLoading = false;
+          _isLoading = false;
           Navigator.pop(context);
           FocusScope.of(context).unfocus();
-          customSnackBar(context, "Check your E-mail");
+          customSnackBar(context, "Check your E-mail",color: ColorManager.purple);
         }
         if (state is ForgetPasswordFailure) {
-          isLoading = false;
+          _isLoading = false;
           customSnackBar(context, "There was an Error please try agin later!");
           log(state.message);
         }
       },
       builder: (context, state) {
         return Form(
-          key: formKey,
+          key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 19),
-                width: 145,
-                height: 5,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(74),
-                    color: MyColors.lightGrey),
-              ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 50),
+                padding: const EdgeInsets.only(bottom: 20),
                 child: Container(
                   padding: EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      bottom: MediaQuery.viewInsetsOf(context).bottom,
-                      top: 20),
+                    left: 16,
+                    right: 16,
+                    bottom: MediaQuery.viewInsetsOf(context).bottom,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
+                      Text(
                         "Forgot Password",
-                        style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.w600,
-                            color: MyColors.white),
+                        style: context.textTheme.bodyLarge,
                       ),
-                      SizedBox(height: 0.01729249 * ScreenSize.height), //15
-                      const Text(
-                        "Enter Your email for the verification processes, we will send a 4-digit code to your email.",
+                      SizedBox(height: 15.h),
+                      Text(
+                        "Please enter your email, and we will send you a confirmation link to reset your password.",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: MyColors.lightGrey,
-                          fontSize: 18,
-                        ),
+                        style: context.textTheme.bodyMedium,
                       ),
+                      SizedBox(height: 15.h),
                       CustomTextFormField(
                         keyboardType: TextInputType.emailAddress,
                         onSaved: (data) {
-                          email = data;
+                          _email = data;
                         },
-                        title: "E-mail",
-                        titleTextStyle: const TextStyle(
-                            color: MyColors.lightGrey,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w600),
+                        title: "EMAIL",
                       ),
-                      SizedBox(height: 0.0288208 * ScreenSize.height),
-                      CustomButton(
-                        title: isLoading == false ? "Send link" : null,
-                        widget: isLoading == true
-                            ? const CircularProgressIndicator()
-                            : null,
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            formKey.currentState!.save();
-                            BlocProvider.of<ForgetPasswordCubit>(context)
-                                .resetPassword(email: email!);
-                          }
-                        },
+                      SizedBox(height: 20.h),
+                      ElevatedButton(
+                        onPressed: _resetPassword,
+                        child: _isLoading == true
+                            ? const MyLoadingIndicator()
+                            : const Text("Send link"),
                       ),
                     ],
                   ),
@@ -119,10 +109,11 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
 void showForgetPasswordBottomSheet(BuildContext context) {
   showModalBottomSheet(
+    showDragHandle: true,
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-            topRight: Radius.circular(35), topLeft: Radius.circular(35))),
-    backgroundColor: MyColors.darkGrey,
+            topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+    backgroundColor: ColorManager.darkGrey,
     context: context,
     isScrollControlled: true,
     builder: (BuildContext context) {
