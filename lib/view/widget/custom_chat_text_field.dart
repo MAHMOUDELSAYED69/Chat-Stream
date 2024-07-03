@@ -1,3 +1,4 @@
+import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:flutter/material.dart';
 
 import '../../helper/constant/color.dart';
@@ -24,47 +25,36 @@ class _CustomChatTextFieldState extends State<CustomChatTextField> {
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: Padding(
-        padding: const EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 5),
+        padding: const EdgeInsets.only(right: 7, left: 7, top: 10, bottom: 5),
         child: TextField(
-          cursorColor: foucsColor ? ColorManager.purple : ColorManager.lightGrey,
+          keyboardType: TextInputType.text,
+          cursorColor:
+              foucsColor ? ColorManager.purple : ColorManager.lightGrey,
           controller: widget.controller,
           onTap: () {
             foucsColor = true;
             setState(() {});
           },
           onSubmitted: widget.onSubmitted,
-          // onTapOutside: (_) {
-          //   foucsColor = false;
-          //   setState(() {});
-          // },
-          style: const TextStyle(color: ColorManager.white),
+          onTapOutside: (_) {
+            foucsColor = false;
+            setState(() {});
+          },
+          style:
+              context.textTheme.bodyMedium?.copyWith(color: ColorManager.white),
           decoration: InputDecoration(
-            filled: true,
-            fillColor: ColorManager.darkGrey2,
-            hintText: '  Write your message',
-            hintStyle: const TextStyle(color: ColorManager.lightGrey),
-            suffixIcon: IconButton(
-              onPressed: widget.onPressed,
-              icon: Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Icon(
+            hintText: ' Write your message...',
+            hintStyle: context.textTheme.bodyMedium,
+            suffixIcon: Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: IconButton(
+                onPressed: widget.onPressed,
+                icon: Icon(
                   Icons.send_rounded,
-                  color: foucsColor ? ColorManager.purple : ColorManager.lightGrey,
-                  size: 30,
+                  color:
+                      foucsColor ? ColorManager.purple : ColorManager.lightGrey,
+                  size: 25,
                 ),
-              ),
-            ),
-            border: const OutlineInputBorder(),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                width: 2,
-                color: Colors.grey,
-              ),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                width: 2,
-                color: ColorManager.purple,
               ),
             ),
           ),

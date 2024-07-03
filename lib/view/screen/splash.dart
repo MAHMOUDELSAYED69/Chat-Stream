@@ -1,10 +1,10 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:chat_stream/router/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../helper/constant/color.dart';
-import '../../helper/responsive.dart';
 import '../../logic/setting/change_name_cubit/change_name_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,15 +30,13 @@ class _SplashScreenState extends State<SplashScreen> {
       final routeName = FirebaseAuth.instance.currentUser != null &&
               FirebaseAuth.instance.currentUser!.emailVerified
           ? RouteManager.home
-          :  RouteManager.login;
+          : RouteManager.login;
       Navigator.pushReplacementNamed(context, routeName);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    ScreenSize.init(context);
-
     return Scaffold(
       backgroundColor: ColorManager.darkGrey,
       body: Center(
@@ -61,11 +59,8 @@ class _SplashScreenState extends State<SplashScreen> {
       animatedTexts: [
         TypewriterAnimatedText(
           'Chat Stream',
-          textStyle: const TextStyle(
-            color: ColorManager.purple,
-            fontSize: 32.0,
-            fontWeight: FontWeight.bold,
-          ),
+          textStyle: context.textTheme.bodyLarge
+              ?.copyWith(fontSize: 32, color: ColorManager.purple),
           speed: const Duration(milliseconds: 100),
         ),
       ],

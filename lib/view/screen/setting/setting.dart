@@ -119,6 +119,7 @@ class _SettingScreenState extends State<SettingScreen> {
               "Chat Stream",
               style: context.textTheme.bodyLarge?.copyWith(fontSize: 20),
             ),
+             SizedBox(height: 50.h),
           ],
         ),
       ),
