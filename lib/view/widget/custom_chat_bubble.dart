@@ -1,6 +1,6 @@
 import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:flutter/material.dart';
-import 'package:chat_stream/helper/constant/color.dart';
+import 'package:chat_stream/helper/constant/colors.dart';
 
 class ChatBubbleForCurrentUser extends StatelessWidget {
   const ChatBubbleForCurrentUser({
@@ -26,7 +26,7 @@ class ChatBubbleForCurrentUser extends StatelessWidget {
           ),
           color: ColorManager.purple,
         ),
-        child: Text(
+        child: SelectableText(
           message,
           style:
               context.textTheme.bodyMedium?.copyWith(color: ColorManager.white),
@@ -59,7 +59,7 @@ class ChatBubbleForFriend extends StatelessWidget {
           ),
           color: ColorManager.darkGrey2,
         ),
-        child: Text(
+        child: SelectableText(
           message,
           textAlign: TextAlign.start,
           style:

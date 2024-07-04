@@ -3,7 +3,8 @@ import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:chat_stream/router/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../helper/constant/color.dart';
+import '../../helper/constant/colors.dart';
+import '../../helper/constant/images.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -38,8 +39,14 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(flex: 6),
+            Image.asset(
+              ImageManager.splash,
+              color: ColorManager.purple,
+              width: context.width / 2,
+              height: context.width / 2,
+            ),
             _buildAnimatedText(),
-            const Spacer(flex: 5),
+            const Spacer(flex: 4),
             _buildSubtitle(),
             const Spacer(),
           ],
@@ -52,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return AnimatedTextKit(
       animatedTexts: [
         TypewriterAnimatedText(
-          'Chat Stream',
+          '   Chat Stream',
           textStyle: context.textTheme.bodyLarge
               ?.copyWith(fontSize: 32, color: ColorManager.purple),
           speed: const Duration(milliseconds: 100),
@@ -66,12 +73,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget _buildSubtitle() {
-    return const Text(
+    return Text(
       "start chatting with your friends",
-      style: TextStyle(
-        fontSize: 16,
-        color: ColorManager.purple,
-      ),
+      style: context.textTheme.bodyMedium?.copyWith(color: ColorManager.purple),
     );
   }
 }
