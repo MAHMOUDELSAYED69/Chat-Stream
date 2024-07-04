@@ -1,4 +1,7 @@
 import 'dart:developer';
+import 'package:chat_stream/helper/constant/colors.dart';
+import 'package:chat_stream/helper/extentions/extentions.dart';
+import 'package:chat_stream/router/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,32 +58,32 @@ class _AccountScreenState extends State<AccountScreen> {
                 customSnackBar(context, "Check your E-mail and login again!");
                 FirebaseService.logOut();
                 Navigator.pushNamedAndRemoveUntil(
-                    context, "/login", (route) => false);
+                    context, RouteManager.login, (route) => false);
               }
               if (state is ForgetPasswordFailure) {
                 customSnackBar(context, "There was an error!");
               }
             },
             child: SettingButton(
-              title: "Change password",
-              icon: Icons.lock,
+              foColor: ColorManager.white,
+              title: "Reset Password",
+              icon: Icons.lock_reset_outlined,
               onTap: () {
-                customDialog(context,
-                    btnTitle: "Send",
-                    title: "Reset Password",
-                    onPressed: _resetPassword,
-                    widget: const Text(
-                      "Check your Email to reset your Password.",
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w500),
-                    ));
+                customDialog(
+                  context,
+                  btnTitle: "Send",
+                  title: "Reset Password",
+                  onPressed: _resetPassword,
+                  widget: Text("Check your Email to reset your Password.",
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.bodyMedium),
+                );
               },
             ),
           ),
-          SettingButton(
+          const SettingButton(
             title: "Change Email address",
             icon: Icons.email,
-            onTap: () {},
           ),
           BlocListener<DeleteAccountCubit, DeleteAccountState>(
             listener: (context, state) {
@@ -89,7 +92,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 FocusScope.of(context).unfocus();
                 customSnackBar(context, "User account deleted successfully!");
                 Navigator.pushNamedAndRemoveUntil(
-                    context, "/login", (route) => false);
+                    context, RouteManager.login, (route) => false);
               }
               if (state is DeleteAccountFailure) {
                 customSnackBar(context, "There was an error!");
@@ -97,14 +100,15 @@ class _AccountScreenState extends State<AccountScreen> {
               }
             },
             child: SettingButton(
+              foColor: ColorManager.red,
               title: "Delete account",
               icon: Icons.delete,
               onTap: () {
                 customDialog(
                   context,
-                  keyboardType: TextInputType.visiblePassword,
                   btnTitle: "DELETE",
-                  title: "Warrning",
+                  titleColor: ColorManager.red,
+                  title: "Warning",
                   controller: _deleteController,
                   isobscure: true,
                   onPressed: _deleteAccount,

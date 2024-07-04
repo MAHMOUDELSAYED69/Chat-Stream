@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../helper/constant/color.dart';
+import '../helper/constant/colors.dart';
 
 abstract class AppTheme {
   //? LIGHT THEME
@@ -18,7 +17,6 @@ abstract class AppTheme {
           ),
         ),
       ),
-
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: ColorManager.purple,
         selectionColor: ColorManager.purple.withOpacity(0.3),
@@ -40,10 +38,9 @@ abstract class AppTheme {
         ),
       ),
       iconTheme: const IconThemeData(color: ColorManager.black),
-      fontFamily: 'Rubik',
+      fontFamily: 'Poppins',
       useMaterial3: true,
       brightness: Brightness.light,
-      // primarySwatch: ColorManager.green ,
       scaffoldBackgroundColor: ColorManager.darkGrey,
       appBarTheme: AppBarTheme(
         elevation: BorderSide.strokeAlignOutside,
@@ -70,10 +67,6 @@ abstract class AppTheme {
           fontWeight: FontWeight.w500,
           color: ColorManager.lightGrey,
         ),
-        displayMedium: TextStyle(
-            fontSize: 16.spMin,
-            color: ColorManager.lightGrey,
-            fontWeight: FontWeight.w500),
       ),
       inputDecorationTheme: const InputDecorationTheme(
         isCollapsed: true,

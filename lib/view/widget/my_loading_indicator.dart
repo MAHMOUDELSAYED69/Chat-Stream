@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../helper/constant/color.dart';
+import '../../helper/constant/colors.dart';
 
 class MyLoadingIndicator extends StatelessWidget {
   const MyLoadingIndicator({super.key});

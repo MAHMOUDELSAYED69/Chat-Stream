@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:chat_stream/helper/constant/color.dart';
+import 'package:chat_stream/helper/constant/colors.dart';
 import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:chat_stream/helper/snackbar.dart';
 import 'package:chat_stream/firebase/functions.dart';

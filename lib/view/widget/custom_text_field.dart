@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:chat_stream/helper/constant/color.dart';
+import 'package:chat_stream/helper/constant/colors.dart';
 import 'package:chat_stream/helper/extentions/extentions.dart';
 class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField(

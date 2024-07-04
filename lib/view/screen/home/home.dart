@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chat_stream/model/chat_card_model.dart';
 import 'package:chat_stream/logic/chat/chat_message_cubit/chat_message_cubit.dart';
 import '../../../logic/chat/chat_card_cubit/chat_card_cubit.dart';
-import '../../../logic/setting/change_name_cubit/change_name_cubit.dart';
 import '../../widget/custom_chat_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
               onPressed: () =>
                   Navigator.pushNamed(context, RouteManager.settings),
-              icon: const Icon(Icons.settings)),
+              icon: const Icon(Icons.more_vert)),
         ],
       ),
       body: BlocBuilder<ChatCardCubit, ChatCardState>(

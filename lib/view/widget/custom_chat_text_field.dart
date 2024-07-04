@@ -1,7 +1,7 @@
 import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:flutter/material.dart';
 
-import '../../helper/constant/color.dart';
+import '../../helper/constant/colors.dart';
 
 class CustomChatTextField extends StatefulWidget {
   const CustomChatTextField({

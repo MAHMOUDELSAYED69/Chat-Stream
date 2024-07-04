@@ -3,7 +3,7 @@ import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:chat_stream/view/widget/my_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:chat_stream/helper/constant/color.dart';
+import 'package:chat_stream/helper/constant/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../helper/snackbar.dart';
 import '../../../logic/setting/change_name_cubit/change_name_cubit.dart';
@@ -50,8 +50,8 @@ class _EditUserNameState extends State<EditUserName> {
                       }
                       if (state is ChangeNameSuccess) {
                         _isNameLoading = false;
-                        Navigator.pop(context);
                         FocusScope.of(context).unfocus();
+                        Navigator.pop(context);
                       }
                       if (state is ChangeNameFailure) {
                         _isNameLoading = false;

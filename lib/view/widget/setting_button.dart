@@ -1,6 +1,6 @@
 import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:flutter/material.dart';
-import 'package:chat_stream/helper/constant/color.dart';
+import 'package:chat_stream/helper/constant/colors.dart';
 
 class SettingButton extends StatelessWidget {
   const SettingButton({
