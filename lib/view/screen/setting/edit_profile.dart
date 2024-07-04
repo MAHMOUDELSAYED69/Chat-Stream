@@ -20,7 +20,7 @@ class _EditUserNameState extends State<EditUserName> {
   late TextEditingController _changeNameController;
   @override
   void initState() {
-     _changeNameController = TextEditingController();
+    _changeNameController = TextEditingController();
     super.initState();
   }
 
@@ -41,78 +41,81 @@ class _EditUserNameState extends State<EditUserName> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                BlocConsumer<ChangeNameCubit, ChangeNameState>(
-                  listener: (context, state) {
-                    if (state is ChangeNameLoading) {
-                      _isNameLoading = true;
-                    }
-                    if (state is ChangeNameSuccess) {
-                      _isNameLoading = false;
-                      Navigator.pop(context);
-                      FocusScope.of(context).unfocus();
-                    }
-                    if (state is ChangeNameFailure) {
-                      _isNameLoading = false;
-                      customSnackBar(context,
-                          "There was an error please try again later!");
-                      log(state.message);
-                    }
-                  },
-                  builder: (context, state) {
-                    return Column(
-                      children: [
-                        CustomTextFormField(
-                          controller: _changeNameController,
-                          validator: (value) {
-                            return null;
-                          },
-                          keyboardType: TextInputType.name,
-                          title: "Change Name",
-                        ),
-                        SizedBox(height: 20.h),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                style: const ButtonStyle(
-                                    backgroundColor: WidgetStatePropertyAll(
-                                        ColorManager.red)),
-                                child: Text(
-                                  "Cancle",
-                                  style: context.textTheme.bodyMedium
-                                      ?.copyWith(color: ColorManager.white),
+                BlocProvider(
+                  create: (context) => ChangeNameCubit(),
+                  child: BlocConsumer<ChangeNameCubit, ChangeNameState>(
+                    listener: (context, state) {
+                      if (state is ChangeNameLoading) {
+                        _isNameLoading = true;
+                      }
+                      if (state is ChangeNameSuccess) {
+                        _isNameLoading = false;
+                        Navigator.pop(context);
+                        FocusScope.of(context).unfocus();
+                      }
+                      if (state is ChangeNameFailure) {
+                        _isNameLoading = false;
+                        customSnackBar(context,
+                            "There was an error please try again later!");
+                        log(state.message);
+                      }
+                    },
+                    builder: (context, state) {
+                      return Column(
+                        children: [
+                          CustomTextFormField(
+                            controller: _changeNameController,
+                            validator: (value) {
+                              return null;
+                            },
+                            keyboardType: TextInputType.name,
+                            title: "Change Name",
+                          ),
+                          SizedBox(height: 20.h),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: const ButtonStyle(
+                                      backgroundColor: WidgetStatePropertyAll(
+                                          ColorManager.red)),
+                                  child: Text(
+                                    "Cancle",
+                                    style: context.textTheme.bodyMedium
+                                        ?.copyWith(color: ColorManager.white),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
                                 ),
-                                onPressed: () => Navigator.pop(context),
                               ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: ElevatedButton(
-                                child: _isNameLoading == false
-                                    ? Text(
-                                        "Save",
-                                        style: context.textTheme.bodyMedium
-                                            ?.copyWith(
-                                                color: ColorManager.white),
-                                      )
-                                    : const MyLoadingIndicator(),
-                                onPressed: () {
-                                  if (_changeNameController.text.isNotEmpty) {
-                                    context
-                                        .read<ChangeNameCubit>()
-                                        .changeDisplayName(
-                                            name: _changeNameController.text);
-                                  } else {
-                                    Navigator.pop(context);
-                                  }
-                                },
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: ElevatedButton(
+                                  child: _isNameLoading == false
+                                      ? Text(
+                                          "Save",
+                                          style: context.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                  color: ColorManager.white),
+                                        )
+                                      : const MyLoadingIndicator(),
+                                  onPressed: () {
+                                    if (_changeNameController.text.isNotEmpty) {
+                                      context
+                                          .read<ChangeNameCubit>()
+                                          .changeDisplayName(
+                                              name: _changeNameController.text);
+                                    } else {
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

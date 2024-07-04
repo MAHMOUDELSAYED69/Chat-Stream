@@ -3,9 +3,7 @@ import 'package:chat_stream/helper/extentions/extentions.dart';
 import 'package:chat_stream/router/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../helper/constant/color.dart';
-import '../../logic/setting/change_name_cubit/change_name_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,10 +17,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _navigateToNextScreen();
-    if (FirebaseAuth.instance.currentUser != null &&
-        FirebaseAuth.instance.currentUser!.emailVerified) {
-      context.read<ChangeNameCubit>().getUserName();
-    }
   }
 
   void _navigateToNextScreen() {

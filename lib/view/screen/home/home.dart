@@ -16,12 +16,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<ChatCardModel> _chatsList = [];
-  @override
-  void initState() {
-    super.initState();
-    context.read<ChatCardCubit>().buildChatCard();
-    context.read<ChangeNameCubit>().getUserName();
-  }
 
   void _goToChat(int index) {
     Navigator.pushNamed(context, RouteManager.chat, arguments: [

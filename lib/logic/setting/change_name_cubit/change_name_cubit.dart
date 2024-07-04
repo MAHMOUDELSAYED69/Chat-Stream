@@ -28,6 +28,7 @@ class ChangeNameCubit extends Cubit<ChangeNameState> {
   }
 
   Future<void> getUserName() async {
+    emit(ChangeNameLoading());
     try {
       final doc = await FirebaseFirestore.instance
           .collection('users')
@@ -35,6 +36,7 @@ class ChangeNameCubit extends Cubit<ChangeNameState> {
           .get();
       if (doc.exists && doc.data()!.containsKey('name')) {
         userName = doc['name'];
+        emit(ChangeNameSuccess());
       } else {
         userName = "Unknown User";
       }

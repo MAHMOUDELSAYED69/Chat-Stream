@@ -6,11 +6,11 @@ import 'package:chat_stream/model/message_model.dart';
 import 'package:chat_stream/logic/chat/chat_message_cubit/chat_message_cubit.dart';
 import 'package:chat_stream/view/widget/custom_chat_bubble.dart';
 
-import '../../../helper/constant/color.dart';
 import '../../widget/custom_chat_text_field.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({super.key, required this.parameter});
+  final List<String> parameter;
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
@@ -41,17 +41,17 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> parameter =
-        ModalRoute.of(context)!.settings.arguments as List<String>;
-    context.read<ChatMessageCubit>().recivedMessage(receiverId: parameter[0]);
+    context
+        .read<ChatMessageCubit>()
+        .recivedMessage(receiverId: widget.parameter[0]);
     return Scaffold(
       appBar: AppBar(
-        title: Text(parameter[2]),
+        title: Text(widget.parameter[2]),
       ),
       bottomNavigationBar: CustomChatTextField(
         controller: _textEditingController,
-        onPressed: () => _sendMessage(parameter[0]),
-        onSubmitted: (_) => _sendMessage(parameter[0]),
+        onPressed: () => _sendMessage(widget.parameter[0]),
+        onSubmitted: (_) => _sendMessage(widget.parameter[0]),
       ),
       body: BlocConsumer<ChatMessageCubit, ChatMessageState>(
         listener: (context, state) {

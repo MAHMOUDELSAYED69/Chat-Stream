@@ -36,73 +36,78 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
-      listener: (context, state) {
-        if (state is ForgetPasswordLoading) {
-          _isLoading = true;
-        }
-        if (state is ForgetPasswordSuccess) {
-          _isLoading = false;
-          Navigator.pop(context);
-          FocusScope.of(context).unfocus();
-          customSnackBar(context, "Check your E-mail",color: ColorManager.purple);
-        }
-        if (state is ForgetPasswordFailure) {
-          _isLoading = false;
-          customSnackBar(context, "There was an Error please try agin later!");
-          log(state.message);
-        }
-      },
-      builder: (context, state) {
-        return Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Container(
-                  padding: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: MediaQuery.viewInsetsOf(context).bottom,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Forgot Password",
-                        style: context.textTheme.bodyLarge,
-                      ),
-                      SizedBox(height: 15.h),
-                      Text(
-                        "Please enter your email, and we will send you a confirmation link to reset your password.",
-                        textAlign: TextAlign.center,
-                        style: context.textTheme.bodyMedium,
-                      ),
-                      SizedBox(height: 15.h),
-                      CustomTextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        onSaved: (data) {
-                          _email = data;
-                        },
-                        title: "EMAIL",
-                      ),
-                      SizedBox(height: 20.h),
-                      ElevatedButton(
-                        onPressed: _resetPassword,
-                        child: _isLoading == true
-                            ? const MyLoadingIndicator()
-                            : const Text("Send link"),
-                      ),
-                    ],
+    return BlocProvider(
+      create: (context) => ForgetPasswordCubit(),
+      child: BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
+        listener: (context, state) {
+          if (state is ForgetPasswordLoading) {
+            _isLoading = true;
+          }
+          if (state is ForgetPasswordSuccess) {
+            _isLoading = false;
+            Navigator.pop(context);
+            FocusScope.of(context).unfocus();
+            customSnackBar(context, "Check your E-mail",
+                color: ColorManager.purple);
+          }
+          if (state is ForgetPasswordFailure) {
+            _isLoading = false;
+            customSnackBar(
+                context, "There was an Error please try agin later!");
+            log(state.message);
+          }
+        },
+        builder: (context, state) {
+          return Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      bottom: MediaQuery.viewInsetsOf(context).bottom,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Forgot Password",
+                          style: context.textTheme.bodyLarge,
+                        ),
+                        SizedBox(height: 15.h),
+                        Text(
+                          "Please enter your email, and we will send you a confirmation link to reset your password.",
+                          textAlign: TextAlign.center,
+                          style: context.textTheme.bodyMedium,
+                        ),
+                        SizedBox(height: 15.h),
+                        CustomTextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          onSaved: (data) {
+                            _email = data;
+                          },
+                          title: "EMAIL",
+                        ),
+                        SizedBox(height: 20.h),
+                        ElevatedButton(
+                          onPressed: _resetPassword,
+                          child: _isLoading == true
+                              ? const MyLoadingIndicator()
+                              : const Text("Send link"),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
