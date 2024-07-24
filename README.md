@@ -3,23 +3,17 @@ Chat Stream is a powerful real-time chat application built using Flutter and Fir
 
 ## Features
 1. **Authentication:**
-
 - `Login`: Secure user login with email and password.
 - `Register`: New user registration with name, email and password.
 - `Forgot Password`: Reset password via email.
 - `Logout`: Log out from the application.
 - `Delete Account`: Permanently delete user account.
-  
 2. **Chatting:**
 - `Real-time Chat`: Communicate with friends in real-time.
-  
 3. **Profile Management:**
-
 - `Update Name`: Change your display name.
 - `Reset Password`: Update your account password.
-
 4. **User Interface:**
-
 - `Animated Splash Screen`: Welcome screen with animated text.
 - `Responsive Design`: Adapts to different screen sizes.
 
@@ -109,22 +103,10 @@ Chat Stream uses the following packages:
 7. **`Logout`**: Log out from your account securely.
 8. **`Delete Account`**: Permanently delete your account if needed.
 
-## Contributing
-Contributions are welcome! Follow these steps to contribute:
-
-Fork the repository.
-Create a new branch: git checkout -b feature/YourFeature
-Make your changes and commit them: git commit -m 'Add some feature'
-Push to the branch: git push origin feature/YourFeature
-Submit a pull request.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-
 ## Contact
-If you have any questions or suggestions, feel free to reach out:
 
-Email: [gcfjxvkj@gmail.com]         
-GitHub: [MAHMOUDELSAYED69]
+For any questions or feedback, please reach out via email: [gcfjxvkj@gmail.com](gcfjxvkj@gmail.com)
